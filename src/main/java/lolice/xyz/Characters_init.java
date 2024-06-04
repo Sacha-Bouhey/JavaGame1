@@ -65,5 +65,9 @@ public class Characters_init{
     public void setStatpoint(int newStatpoint) {
         this.statpoint = newStatpoint;
     }
+
+    public void TakeDamage(int damage) {
+        health -= damage - defence;
+    }
 }
 
