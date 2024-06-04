@@ -44,10 +44,11 @@ public class Characters {
         default_class_value.get("Magic SwordMan").add(5);
         default_class_value.get("Magic SwordMan").add(0);
 
-
+        //Test if player input is working properly
         System.out.println(default_class_value.get("Mage").get(1));
         String UserChoice = Player_choice.GetClassName(args);
         System.out.println(UserChoice);
+        //Initialisation for the player Character.
         Characters_init player = new Characters_init(
                 default_class_value.get(UserChoice).get(0),
                 default_class_value.get(UserChoice).get(1),
@@ -56,7 +57,7 @@ public class Characters {
                 default_class_value.get(UserChoice).get(4),
                 default_class_value.get(UserChoice).get(5)
         );
-        System.out.println(player.getAgilite());
+        System.out.println(player.getAgility());
 
     }
 }

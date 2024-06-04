@@ -1,38 +1,40 @@
 package lolice.xyz;
 public class Characters_init{
-    private int endurance;
-    private int force;
+    private int health;
+    private int strength;
     private int mana;
-    private int agilite;
-    private int defense;
+    private int agility;
+    private int defence;
     private int statpoint;
 
-    public Characters_init(int Cendurance, int Cforce, int Cmana, int Cagilite, int Cdefense, int Cstatpoint) {
-        this.endurance = Cendurance;
-        this.force = Cforce;
+    public Characters_init(int Chealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint) {
+        this.health = Chealth;
+        this.strength = Cstrength;
         this.mana = Cmana;
-        this.agilite = Cagilite;
-        this.defense = Cdefense;
+        this.agility = Cagility;
+        this.defence = Cdefence;
         this.statpoint = Cstatpoint;
     }
+
+    //Getters
+    public int getHealth() {
+        return health;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
     public int getMana() {
         return mana;
     }
 
-    public int getForce() {
-        return force;
+    public int getAgility() {
+        return agility;
     }
 
-    public int getEndurance() {
-        return endurance;
-    }
-
-    public int getAgilite() {
-        return agilite;
-    }
-
-    public int getDefense() {
-        return defense;
+    public int getDefence() {
+        return defence;
     }
 
     public int getStatpoint() {
@@ -40,24 +42,24 @@ public class Characters_init{
     }
 
     // Setters
+    public void sethealth(int newhealth) {
+        this.health = newhealth;
+    }
+
+    public void setStrength(int newStrength) {
+        this.strength = newStrength;
+    }
+
     public void setMana(int newMana) {
         this.mana = newMana;
     }
 
-    public void setForce(int newForce) {
-        this.force = newForce;
+    public void setAgility(int newAgility) {
+        this.agility = newAgility;
     }
 
-    public void setEndurance(int newEndurance) {
-        this.endurance = newEndurance;
-    }
-
-    public void setAgilite(int newAgilite) {
-        this.agilite = newAgilite;
-    }
-
-    public void setDefense(int newDefense) {
-        this.defense = newDefense;
+    public void setDefence(int newDefence) {
+        this.defence = newDefence;
     }
 
     public void setStatpoint(int newStatpoint) {
