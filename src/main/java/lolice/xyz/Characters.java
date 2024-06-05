@@ -3,8 +3,10 @@ package lolice.xyz;
 import com.sun.jdi.LocalVariable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class Characters {
     public static void InitCharValue(String[] args) {
@@ -48,21 +50,25 @@ public class Characters {
 
         //Test if player input is working properly
         System.out.println(default_class_value.get("Mage").get(1));
-        String UserChoice = Player_choice.GetClassName(args);
-        System.out.println(UserChoice);
+        String ClassName = Player_choice.GetClassName(args);
+        System.out.println(ClassName);
         //Initialisation for the player Character.
 
-        if (default_class_value.containsKey(UserChoice)) {
+        if (default_class_value.containsKey(ClassName)) {
             Characters_init player = new Characters_init(
-                    default_class_value.get(UserChoice).get(0),
-                    default_class_value.get(UserChoice).get(1),
-                    default_class_value.get(UserChoice).get(2),
-                    default_class_value.get(UserChoice).get(3),
-                    default_class_value.get(UserChoice).get(4),
-                    default_class_value.get(UserChoice).get(5)
+                    default_class_value.get(ClassName).get(0),
+                    default_class_value.get(ClassName).get(1),
+                    default_class_value.get(ClassName).get(2),
+                    default_class_value.get(ClassName).get(3),
+                    default_class_value.get(ClassName).get(4),
+                    default_class_value.get(ClassName).get(5)
             );
-
-
+            ArrayList<Integer> PlayerSkill = default_class_value.get(ClassName);
+            List<Skill> MageSkills = new ArrayList<>();
+            MageSkills.add(new Skill("Fireball", "Une boule de feu globalement", 50, 20, false));
+            MageSkills.add(new Skill("TestBall", "C'est rien tkt", 9999999, 0, true));
         }
+
+        
     }
 }
