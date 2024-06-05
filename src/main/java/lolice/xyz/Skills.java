@@ -1,20 +1,17 @@
 package lolice.xyz;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public class Skills {
     public String SkillName;
     public String Description;
     public int Damage;
     public boolean IsActive;
+    public int ManaCost;
 
-    public Skills(String SkillName, String Description, int Damage, boolean IsActive) {
+    public Skills(String SkillName, String Description, int Damage, int ManaCost, boolean IsActive) {
         this.SkillName = SkillName;
         this.Description = Description;
         this.Damage = Damage;
+        this.ManaCost = ManaCost;
         this.IsActive = IsActive;
     }
 
@@ -31,17 +28,20 @@ public class Skills {
         return Damage;
     }
 
+    public int getManaCost() {
+        return ManaCost;
+    }
+
     public boolean isActive() {
         return IsActive;
     }
 
     //Setters
-
     public void setActive() {
         this.IsActive = true;
     }
 
-    public void useSkill(String SkillName) {
-
+    public static void useSkill(String SkillName) {
+        System.out.println(SkillName + "is used");
     }
 }
