@@ -1,13 +1,13 @@
 package lolice.xyz;
 
-public class Skills {
+public class Skill {
     public String SkillName;
     public String Description;
     public int Damage;
     public boolean IsActive;
     public int ManaCost;
 
-    public Skills(String SkillName, String Description, int Damage, int ManaCost, boolean IsActive) {
+    public Skill(String SkillName, String Description, int Damage, int ManaCost, boolean IsActive) {
         this.SkillName = SkillName;
         this.Description = Description;
         this.Damage = Damage;
