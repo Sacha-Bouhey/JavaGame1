@@ -1,11 +1,13 @@
 package lolice.xyz;
 
+import com.sun.jdi.LocalVariable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Characters {
-    public static void InitChar(String[] args) {
+    public static void InitCharValue(String[] args) {
         Map<String, ArrayList<Integer>> default_class_value = new HashMap<String, ArrayList<Integer>>();
 
         //Init Mage class
@@ -49,15 +51,18 @@ public class Characters {
         String UserChoice = Player_choice.GetClassName(args);
         System.out.println(UserChoice);
         //Initialisation for the player Character.
-        Characters_init player = new Characters_init(
-                default_class_value.get(UserChoice).get(0),
-                default_class_value.get(UserChoice).get(1),
-                default_class_value.get(UserChoice).get(2),
-                default_class_value.get(UserChoice).get(3),
-                default_class_value.get(UserChoice).get(4),
-                default_class_value.get(UserChoice).get(5)
-        );
-        System.out.println(player.getAgility());
 
+        if (default_class_value.containsKey(UserChoice)) {
+            Characters_init player = new Characters_init(
+                    default_class_value.get(UserChoice).get(0),
+                    default_class_value.get(UserChoice).get(1),
+                    default_class_value.get(UserChoice).get(2),
+                    default_class_value.get(UserChoice).get(3),
+                    default_class_value.get(UserChoice).get(4),
+                    default_class_value.get(UserChoice).get(5)
+            );
+
+
+        }
     }
 }
