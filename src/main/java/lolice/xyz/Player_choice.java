@@ -1,7 +1,6 @@
 package lolice.xyz;
 
 import java.util.Scanner;
-import java.util.function.Function;
 
 public class Player_choice {
     public static String GetClassName(String[] args) {
