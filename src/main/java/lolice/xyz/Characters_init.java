@@ -1,4 +1,7 @@
 package lolice.xyz;
+
+import java.util.List;
+
 public class Characters_init{
     private int health;
     private int strength;
@@ -6,8 +9,9 @@ public class Characters_init{
     private int agility;
     private int defence;
     private int statpoint;
+    private List<Skill> skills;
 
-    public Characters_init(int Chealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint) {
+    public Characters_init(int Chealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills) {
         this.health = Chealth;
         this.strength = Cstrength;
         this.mana = Cmana;

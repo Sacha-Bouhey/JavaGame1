@@ -48,27 +48,29 @@ public class Characters {
         default_class_value.get("Magic SwordMan").add(5);
         default_class_value.get("Magic SwordMan").add(0);
 
-        //Test if player input is working properly
-        System.out.println(default_class_value.get("Mage").get(1));
-        String ClassName = Player_choice.GetClassName(args);
-        System.out.println(ClassName);
-        //Initialisation for the player Character.
 
+        String ClassName = Player_choice.GetClassName(args);
+        ArrayList<Integer> PlayerSkill = default_class_value.get(ClassName);
+        //Initialisation for the player Character.
         if (default_class_value.containsKey(ClassName)) {
-            Characters_init player = new Characters_init(
-                    default_class_value.get(ClassName).get(0),
-                    default_class_value.get(ClassName).get(1),
-                    default_class_value.get(ClassName).get(2),
-                    default_class_value.get(ClassName).get(3),
-                    default_class_value.get(ClassName).get(4),
-                    default_class_value.get(ClassName).get(5)
-            );
-            ArrayList<Integer> PlayerSkill = default_class_value.get(ClassName);
             List<Skill> MageSkills = new ArrayList<>();
             MageSkills.add(new Skill("Fireball", "Une boule de feu globalement", 50, 20, false));
             MageSkills.add(new Skill("TestBall", "C'est rien tkt", 9999999, 0, true));
-        }
 
-        
+            List<Skill> WarriorSkills = new ArrayList<>();
+            WarriorSkills.add(new Skill("Berserker Stance", "WOW !", 10, 0, true));
+
+            Characters_init player;
+            if(ClassName.equals("Mage")) {
+                player = new Characters_init(PlayerSkill.get(0), PlayerSkill.get(1), PlayerSkill.get(2), PlayerSkill.get(3), PlayerSkill.get(4), PlayerSkill.get(5), MageSkills);
+            }
+            else if(ClassName.equals("Warrior")) {
+                player = new Characters_init(PlayerSkill.get(0), PlayerSkill.get(1), PlayerSkill.get(2), PlayerSkill.get(3), PlayerSkill.get(4), PlayerSkill.get(5), MageSkills);
+            }
+            else {
+                player = new Characters_init(PlayerSkill.get(0), PlayerSkill.get(1), PlayerSkill.get(2), PlayerSkill.get(3), PlayerSkill.get(4), PlayerSkill.get(5), new ArrayList<>());
+            }
+            System.out.println(player.getAgility());
+        }
     }
 }
