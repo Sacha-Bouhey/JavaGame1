@@ -1,7 +1,5 @@
 package lolice.xyz;
 
-import com.sun.jdi.LocalVariable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,8 +7,8 @@ import java.util.Map;
 import java.util.List;
 
 public class Characters {
-    public static void InitCharValue(String[] args) {
-        Map<String, ArrayList<Integer>> default_class_value = new HashMap<String, ArrayList<Integer>>();
+    public static Map InitCharValue(String[] args) {
+        Map<String, ArrayList<Integer>> default_class_value = new HashMap<>();
 
         //Init Mage class
         default_class_value.put("Mage", new ArrayList<Integer>());
@@ -48,29 +46,9 @@ public class Characters {
         default_class_value.get("Magic SwordMan").add(5);
         default_class_value.get("Magic SwordMan").add(0);
 
-
+        //Getting player input info
         String ClassName = Player_choice.GetClassName(args);
-        ArrayList<Integer> PlayerSkill = default_class_value.get(ClassName);
-        //Initialisation for the player Character.
-        if (default_class_value.containsKey(ClassName)) {
-            List<Skill> MageSkills = new ArrayList<>();
-            MageSkills.add(new Skill("Fireball", "Une boule de feu globalement", 50, 20, false));
-            MageSkills.add(new Skill("TestBall", "C'est rien tkt", 9999999, 0, true));
 
-            List<Skill> WarriorSkills = new ArrayList<>();
-            WarriorSkills.add(new Skill("Berserker Stance", "WOW !", 10, 0, true));
-
-            Characters_init player;
-            if(ClassName.equals("Mage")) {
-                player = new Characters_init(PlayerSkill.get(0), PlayerSkill.get(1), PlayerSkill.get(2), PlayerSkill.get(3), PlayerSkill.get(4), PlayerSkill.get(5), MageSkills);
-            }
-            else if(ClassName.equals("Warrior")) {
-                player = new Characters_init(PlayerSkill.get(0), PlayerSkill.get(1), PlayerSkill.get(2), PlayerSkill.get(3), PlayerSkill.get(4), PlayerSkill.get(5), MageSkills);
-            }
-            else {
-                player = new Characters_init(PlayerSkill.get(0), PlayerSkill.get(1), PlayerSkill.get(2), PlayerSkill.get(3), PlayerSkill.get(4), PlayerSkill.get(5), new ArrayList<>());
-            }
-            System.out.println(player.getAgility());
-        }
+        return default_class_value;
     }
 }
