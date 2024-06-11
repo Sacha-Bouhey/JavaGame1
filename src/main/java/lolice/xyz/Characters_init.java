@@ -1,6 +1,5 @@
 package lolice.xyz;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Characters_init{
@@ -96,29 +95,23 @@ public class Characters_init{
         System.out.println("Statpoint: " + statpoint);
     }
 
+    //Check if enough mana
+    public boolean checkMana(int manaCost) {
+        return mana >= manaCost;
+    }
+
     //Use skill
-    public void useSkill(Skill skill) {
-        //Verify if skill is active
-        if(skill.isActive() == false) {
-            System.out.println("Skill is not active");
-            return;
-        }
-        //Verify if player has enough mana
-        if(mana < skill.getManaCost()) {
-            System.out.println("Not enough mana");
-            return;
-        }
+    public int useSkill(Skill player_skill) {
         //Use skill
+        int damage = player_skill.getDamage();
+        //If skill doesn't cost mana, add strength to damage
+        if(player_skill.getManaCost() == 0)
+            damage += this.strength;
+        //If skill costs mana, remove mana
         else {
-            int damage = skill.getDamage();
-            //If skill doesn't cost mana, add strength to damage
-            if(skill.getManaCost() == 0)
-                damage += this.strength;
-            //If skill costs mana, remove mana
-            else {
-                this.mana -= skill.getManaCost();
-            }
+            this.mana -= player_skill.getManaCost();
         }
+        return damage;
     }
 }
 
