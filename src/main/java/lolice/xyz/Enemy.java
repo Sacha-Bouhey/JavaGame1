@@ -1,37 +1,20 @@
 package lolice.xyz;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Enemy {
-    private int Health;
-    private int strength;
-    private int mana;
-    private int defence;
-    private List<Skill> skills;
+    public static Map InitEnemyValue(String[] args) {
+        Map<String, ArrayList<Integer>> default_enemy_value = new HashMap<>();
 
-    public Enemy(int Ehealth, int Estrength, int Emana, int Edefence, List<Skill> Eskills) {
-        this.Health = Ehealth;
-        this.strength = Estrength;
-        this.mana = Emana;
-        this.defence = Edefence;
-        this.skills = Eskills;
-    }
-    //Getters
-    public int getHealth() {
-        return Health;
-    }
-    public int getStrength() {
-        return strength;
-    }
-    public int getMana() {
-        return mana;
-    }
-    public int getDefence() {
-        return defence;
-    }
-    public List<Skill> getSkills() {
-        return skills;
-    }
+        default_enemy_value.put("Gobelin", new ArrayList<>());
+        default_enemy_value.get("Gobelin").add(50);
+        default_enemy_value.get("Gobelin").add(6);
+        default_enemy_value.get("Gobelin").add(0);
+        default_enemy_value.get("Gobelin").add(1);
 
-    //Setters
+        return default_enemy_value;
+    }
 }
