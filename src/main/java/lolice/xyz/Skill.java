@@ -44,4 +44,17 @@ public class Skill {
     public static void useSkill(String SkillName) {
         System.out.println(SkillName + "is used");
     }
+
+    //Other
+    public void showInfo() {
+        System.out.println("Skill name: " + SkillName);
+        System.out.println("Description: " + Description);
+        System.out.println("Damage: " + Damage);
+        System.out.println("Mana cost: " + ManaCost);
+        System.out.println("Is active: " + IsActive);
+    }
+
+    public String getName() {
+        return SkillName;
+    }
 }
