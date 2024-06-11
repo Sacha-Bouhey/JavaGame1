@@ -9,4 +9,10 @@ public class Player_choice  {
         String ClassName = UserClass.nextLine();
         return ClassName;
     }
+    public static String GetSkillName() {
+        Scanner UserSkill = new Scanner(System.in);
+        System.out.println("Enter your skill: ");
+        String SkillName = UserSkill.nextLine();
+        return SkillName;
+    }
 }
