@@ -46,9 +46,6 @@ public class Characters {
         default_class_value.get("Magic SwordMan").add(5);
         default_class_value.get("Magic SwordMan").add(0);
 
-        //Getting player input info
-        String ClassName = Player_choice.GetClassName(args);
-
         return default_class_value;
     }
 }
