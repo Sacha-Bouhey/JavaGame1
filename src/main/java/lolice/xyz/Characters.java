@@ -11,40 +11,16 @@ public class Characters {
         Map<String, ArrayList<Integer>> default_class_value = new HashMap<>();
 
         //Init Mage class
-        default_class_value.put("Mage", new ArrayList<Integer>());
-        default_class_value.get("Mage").add(100);
-        default_class_value.get("Mage").add(5);
-        default_class_value.get("Mage").add(200);
-        default_class_value.get("Mage").add(10);
-        default_class_value.get("Mage").add(1);
-        default_class_value.get("Mage").add(0);
+        default_class_value.put("Mage", new ArrayList<Integer>(Arrays.asList(100, 5, 200, 10, 1, 0)));
 
         //Init Warrior class
-        default_class_value.put("Warrior", new ArrayList<Integer>());
-        default_class_value.get("Warrior").add(200);
-        default_class_value.get("Warrior").add(20);
-        default_class_value.get("Warrior").add(100);
-        default_class_value.get("Warrior").add(5);
-        default_class_value.get("Warrior").add(10);
-        default_class_value.get("Warrior").add(0);
+        default_class_value.put("Warrior", new ArrayList<Integer>(Arrays.asList(200, 20, 100, 5, 10, 0)));
 
         //Init Rogue class
-        default_class_value.put("Rogue", new ArrayList<Integer>());
-        default_class_value.get("Rogue").add(110);
-        default_class_value.get("Rogue").add(25);
-        default_class_value.get("Rogue").add(120);
-        default_class_value.get("Rogue").add(20);
-        default_class_value.get("Rogue").add(2);
-        default_class_value.get("Rogue").add(0);
+        default_class_value.put("Rogue", new ArrayList<Integer>(Arrays.asList(110, 25, 120, 20, 2, 0)));
 
         //Init Magic SwordMan class
-        default_class_value.put("Magic SwordMan", new ArrayList<Integer>());
-        default_class_value.get("Magic SwordMan").add(130);
-        default_class_value.get("Magic SwordMan").add(30);
-        default_class_value.get("Magic SwordMan").add(150);
-        default_class_value.get("Magic SwordMan").add(10);
-        default_class_value.get("Magic SwordMan").add(5);
-        default_class_value.get("Magic SwordMan").add(0);
+        default_class_value.put("Magic SwordMan", new ArrayList<Integer>(Arrays.asList(130, 30, 150, 10, 5, 0)));
 
         return default_class_value;
     }
