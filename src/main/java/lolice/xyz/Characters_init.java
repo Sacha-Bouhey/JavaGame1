@@ -84,5 +84,41 @@ public class Characters_init{
     public void TakeDamage(int damage) {
         health -= damage - defence;
     }
+
+    //Show info
+    public void showInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Health: " + health);
+        System.out.println("Strength: " + strength);
+        System.out.println("Mana: " + mana);
+        System.out.println("Agility: " + agility);
+        System.out.println("Defence: " + defence);
+        System.out.println("Statpoint: " + statpoint);
+    }
+
+    //Use skill
+    public void useSkill(Skill skill) {
+        //Verify if skill is active
+        if(skill.isActive() == false) {
+            System.out.println("Skill is not active");
+            return;
+        }
+        //Verify if player has enough mana
+        if(mana < skill.getManaCost()) {
+            System.out.println("Not enough mana");
+            return;
+        }
+        //Use skill
+        else {
+            int damage = skill.getDamage();
+            //If skill doesn't cost mana, add strength to damage
+            if(skill.getManaCost() == 0)
+                damage += this.strength;
+            //If skill costs mana, remove mana
+            else {
+                this.mana -= skill.getManaCost();
+            }
+        }
+    }
 }
 
