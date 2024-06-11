@@ -12,7 +12,7 @@ public class Player_init {
             List<Skill> MageSkills = new ArrayList<>();
             MageSkills.add(new Skill("Fireball", "Une boule de feu globalement", 50, 20, false));
             MageSkills.add(new Skill("Testball", "C'est rien tkt", 9999999, 0, true));
-
+            
             List<Skill> WarriorSkills = new ArrayList<>();
             WarriorSkills.add(new Skill("Berserker Stance", "WOW !", 10, 0, true));
 
