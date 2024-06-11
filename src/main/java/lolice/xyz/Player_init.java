@@ -6,13 +6,12 @@ import java.util.Map;
 
 public class Player_init {
     public static Characters_init Player_init(Map<String, ArrayList<Integer>> default_class_value, String ClassName) {
-
         if (default_class_value.containsKey(ClassName)) {
             ArrayList<Integer> PlayerStats = default_class_value.get(ClassName);
 
             List<Skill> MageSkills = new ArrayList<>();
             MageSkills.add(new Skill("Fireball", "Une boule de feu globalement", 50, 20, false));
-            MageSkills.add(new Skill("TestBall", "C'est rien tkt", 9999999, 0, true));
+            MageSkills.add(new Skill("Testball", "C'est rien tkt", 9999999, 0, true));
 
             List<Skill> WarriorSkills = new ArrayList<>();
             WarriorSkills.add(new Skill("Berserker Stance", "WOW !", 10, 0, true));
