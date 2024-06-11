@@ -33,6 +33,7 @@ public class Battle {
             enemiesTurn();
         }
     }
+
     //Player turn
     private void playerTurn() {
         boolean playerchoice = false;
@@ -42,26 +43,40 @@ public class Battle {
         while(!playerchoice) {
             System.out.println("Choose an action");
             //List all skills of the player
-            List<Skill> skills = player.getSkills();
-            for (int i = 0; i < skills.size(); i++) {
-                System.out.println(i + 1 + ". " + skills.get(i).getName());
+            List<Skill> player_skill_list = player.getSkills();
+            int y = 0;
+            for (int i = 0; i < player_skill_list.size(); i++) {
+                if(player_skill_list.get(i).isActive()) {
+                    y++;
+                    System.out.println(y  + ". " + player_skill_list.get(i).getName());
+                }
             }
 
             //Get player choice
             String skillName = Player_choice.GetSkillName();
+            //if skillName doesn't exist, ask for another skill
+            if(getSkillByName(skillName) == null) {
+                System.out.println("Skill doesn't exist");
+                continue;
+            }
 
             //Make player choice in a skill instance
             Skill playerskill = getSkillByName(skillName);
 
             //Use skill if it exists
-            if (playerskill != null) {
-                player.useSkill(playerskill);
-                System.out.println(playerskill.getName() + "hit the enemy for" + playerskill.getDamage() + "damage");
-                enemies.takeDamage(playerskill.getDamage());
-                System.out.println(enemies.getName() + " has " + enemies.getHealth() + " health left");
-                playerchoice = true;
+            if(playerskill.isActive()) {
+                if (player.checkMana(playerskill.getManaCost())) {
+                    player.useSkill(playerskill);
+                    System.out.println(playerskill.getName() + " hit the enemy for " + player.useSkill(playerskill) + " damage");
+                    enemies.takeDamage(player.useSkill(playerskill));
+                    System.out.println(enemies.getName() + " has " + enemies.getHealth() + " health left");
+                    playerchoice = true;
+
+                } else {
+                    System.out.println("Not enough mana");
+                }
             } else {
-                System.out.println("Invalid skill name");
+                System.out.println("Skill is not active");
             }
         }
     }
