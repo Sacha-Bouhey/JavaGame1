@@ -30,59 +30,59 @@ public class Characters_init{
     public int getHealth() {
         return health;
     }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public int getMana() {
-        return mana;
-    }
-
-    public int getAgility() {
-        return agility;
-    }
-
-    public int getDefence() {
-        return defence;
-    }
-
-    public int getStatpoint() {
-        return statpoint;
-    }
+//
+//    public int getStrength() {
+//        return strength;
+//    }
+//
+//    public int getMana() {
+//        return mana;
+//    }
+//
+//    public int getAgility() {
+//        return agility;
+//    }
+//
+//    public int getDefence() {
+//        return defence;
+//    }
+//
+//    public int getStatpoint() {
+//        return statpoint;
+//    }
 
     public List<Skill> getSkills() {
         return skills;
     }
 
     // Setters
-    public void sethealth(int newhealth) {
-        this.health = newhealth;
-    }
-
-    public void setStrength(int newStrength) {
-        this.strength = newStrength;
-    }
-
-    public void setMana(int newMana) {
-        this.mana = newMana;
-    }
-
-    public void setAgility(int newAgility) {
-        this.agility = newAgility;
-    }
-
-    public void setDefence(int newDefence) {
-        this.defence = newDefence;
-    }
-
-    public void setStatpoint(int newStatpoint) {
-        this.statpoint = newStatpoint;
-    }
-
-    public void TakeDamage(int damage) {
-        health -= damage - defence;
-    }
+//    public void setHealth(int newHealth) {
+//        this.health = newHealth;
+//    }
+//
+//    public void setStrength(int newStrength) {
+//        this.strength = newStrength;
+//    }
+//
+//    public void setMana(int newMana) {
+//        this.mana = newMana;
+//    }
+//
+//    public void setAgility(int newAgility) {
+//        this.agility = newAgility;
+//    }
+//
+//    public void setDefence(int newDefence) {
+//        this.defence = newDefence;
+//    }
+//
+//    public void setStatpoint(int newStatpoint) {
+//        this.statpoint = newStatpoint;
+//    }
+//
+//    public void TakeDamage(int damage) {
+//        health -= damage - defence;
+//    }
 
     //Show info
     public void showInfo() {

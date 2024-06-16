@@ -36,11 +36,11 @@ public class Battle {
 
     //Player turn
     private void playerTurn() {
-        boolean playerchoice = false;
+        boolean player_choice = false;
         System.out.println(player.getName()+"'s turn");
 
         //While player hasn't chosen a skill
-        while(!playerchoice) {
+        while(!player_choice) {
             System.out.println("Choose an action");
             //List all skills of the player
             List<Skill> player_skill_list = player.getSkills();
@@ -70,7 +70,7 @@ public class Battle {
                     System.out.println(playerskill.getName() + " hit the enemy for " + player.useSkill(playerskill) + " damage");
                     enemies.takeDamage(player.useSkill(playerskill));
                     System.out.println(enemies.getName() + " has " + enemies.getHealth() + " health left");
-                    playerchoice = true;
+                    player_choice = true;
 
                 } else {
                     System.out.println("Not enough mana");
@@ -86,9 +86,6 @@ public class Battle {
     }
 
     private boolean isBattleOver() {
-        if(player.getHealth() <= 0 || enemies.getHealth() <= 0)
-            return true;
-        else
-            return false;
+        return player.getHealth() <= 0 || enemies.getHealth() <= 0;
     }
 }
