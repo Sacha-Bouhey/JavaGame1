@@ -2,6 +2,7 @@ package lolice.xyz;
 
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Players.Characters_init;
+import lolice.xyz.Players.Leveling;
 import lolice.xyz.Players.Player_choice;
 
 import java.util.List;
@@ -32,6 +33,8 @@ public class Battle {
         while (!isBattleOver()) {
             playerTurn();
             if (isBattleOver()) {
+                System.out.println("You have gained experience points");
+                Leveling.gainExp(enemies, player);
                 break;
             }
             enemiesTurn();
@@ -87,6 +90,18 @@ public class Battle {
     private void enemiesTurn() {
         //TODO: enemy AI
         System.out.println(enemies.getName() + "'s turn");
+        //Get a random active skill from the enemy
+        List<Skill> enemy_skill_list = enemies.getSkills();
+        Skill enemyskill = enemy_skill_list.get((int) (Math.random() * enemy_skill_list.size()));
+        //Use skill
+        if(enemies.getMana() >= enemyskill.getManaCost()) {
+            enemies.useSkill(enemyskill);
+            System.out.println(enemyskill.getName() + " hit you for " + enemies.useSkill(enemyskill) + " damage");
+            player.TakeDamage(enemies.useSkill(enemyskill));
+            System.out.println(player.getName() + " has " + player.getHealth() + " health left");
+        } else {
+            System.out.println("Not enough mana");
+        }
     }
 
     private boolean isBattleOver() {

@@ -69,4 +69,14 @@ public class Enemy_init {
             System.out.println(skill.getSkillName());
         }
     }
+
+    public int useSkill(Skill enemy_skill) {
+        int damage = enemy_skill.getDamage();
+        if(enemy_skill.getManaCost() == 0) {
+            return damage + strength;
+        } else {
+            this.mana -= enemy_skill.getManaCost();
+            return enemy_skill.getDamage();
+        }
+    }
 }

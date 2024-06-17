@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Enemy_skill_init {
-    public static Enemy_init Enemy_skill_init(Map<String, ArrayList<Integer>> default_enemy_value, String EnemyName) {
+    public static Enemy_init Enemies_skill_init(Map<String, ArrayList<Integer>> default_enemy_value, String EnemyName) {
 
         if (default_enemy_value.containsKey(EnemyName)) {
             ArrayList<Integer> EnemyStats = default_enemy_value.get(EnemyName);
