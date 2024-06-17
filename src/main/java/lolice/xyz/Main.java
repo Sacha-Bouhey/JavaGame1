@@ -1,6 +1,14 @@
 package lolice.xyz;
 
 
+import lolice.xyz.Enemies.Enemy;
+import lolice.xyz.Enemies.Enemy_init;
+import lolice.xyz.Enemies.Enemy_skill_init;
+import lolice.xyz.Players.Characters;
+import lolice.xyz.Players.Characters_init;
+import lolice.xyz.Players.Player_choice;
+import lolice.xyz.Players.Player_init;
+
 public class Main {
     public static void main(String[] args) {
         //Init player and enemy

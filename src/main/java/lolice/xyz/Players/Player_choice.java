@@ -1,4 +1,4 @@
-package lolice.xyz;
+package lolice.xyz.Players;
 
 import java.util.Scanner;
 

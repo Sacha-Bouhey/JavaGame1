@@ -1,4 +1,4 @@
-package lolice.xyz;
+package lolice.xyz.Enemies;
 
 import java.util.ArrayList;
 import java.util.HashMap;

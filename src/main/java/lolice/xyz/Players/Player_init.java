@@ -1,4 +1,6 @@
-package lolice.xyz;
+package lolice.xyz.Players;
+
+import lolice.xyz.Skill;
 
 import java.util.ArrayList;
 import java.util.List;

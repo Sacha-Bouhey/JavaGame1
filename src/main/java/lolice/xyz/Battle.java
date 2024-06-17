@@ -1,5 +1,9 @@
 package lolice.xyz;
 
+import lolice.xyz.Enemies.Enemy_init;
+import lolice.xyz.Players.Characters_init;
+import lolice.xyz.Players.Player_choice;
+
 import java.util.List;
 
 public class Battle {
