@@ -3,7 +3,7 @@ package lolice.xyz.Players;
 import java.util.Scanner;
 
 public class Player_choice  {
-    public static String GetClassName(String[] args) {
+    public static String GetClassName() {
         Scanner UserClass = new Scanner(System.in);
         System.out.println("Enter your class: ");
         String ClassName = UserClass.nextLine();
