@@ -12,6 +12,7 @@ public class Main {
         Characters_init player = Player_init.Player_init(Characters.InitCharValue(), Player_choice.GetClassName());
         Enemy_init enemy = Enemy_skill_init.Enemies_skill_init(Enemy.InitEnemyValue(), "Goblin");
         //Start battle
+        player.showInfo();
         Battle battle = new Battle(player, enemy);
         battle.Start();
         player.showInfo();
