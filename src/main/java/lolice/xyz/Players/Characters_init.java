@@ -1,6 +1,7 @@
 package lolice.xyz.Players;
 
 import lolice.xyz.Skill;
+import lolice.xyz.Skill_stats;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class Characters_init{
     private int statpoint;
     private List<Skill> skills;
     private Leveling leveling;
+    private Skill_stats skill_stats;
 
     public Characters_init(String Cname, int Cmaxhealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills) {
         this.name = Cname;
@@ -63,6 +65,9 @@ public class Characters_init{
     }
     public Leveling getLeveling() {
         return leveling;
+    }
+    public Skill_stats getSkill_stats() {
+        return skill_stats;
     }
 
     public List<Skill> getSkills() {
