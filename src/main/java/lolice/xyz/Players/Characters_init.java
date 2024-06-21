@@ -3,7 +3,8 @@ package lolice.xyz.Players;
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
 
-import java.util.List;
+import java.util.*;
+
 
 public class Characters_init{
     private String name;
@@ -16,7 +17,7 @@ public class Characters_init{
     private int statpoint;
     private List<Skill> skills;
     private Leveling leveling;
-    private Skill_stats skill_stats;
+    private List<Skill_stats> skill_stats;
 
     public Characters_init(String Cname, int Cmaxhealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills) {
         this.name = Cname;
@@ -29,6 +30,10 @@ public class Characters_init{
         this.statpoint = Cstatpoint;
         this.skills = skills;
         this.leveling = new Leveling(0, 1);
+        this.skill_stats = new ArrayList<>();
+        skill_stats.add(new Skill_stats("Staff", name, 0));
+        skill_stats.add(new Skill_stats("Books", name, 0));
+        skill_stats.add(new Skill_stats("Magic gauntlet", name, 0));
     }
 
     //Getters
@@ -66,7 +71,8 @@ public class Characters_init{
     public Leveling getLeveling() {
         return leveling;
     }
-    public Skill_stats getSkill_stats() {
+
+    public List<Skill_stats> getSkill_stats() {
         return skill_stats;
     }
 
