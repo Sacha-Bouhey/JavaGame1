@@ -10,7 +10,7 @@ public class Characters {
         Map<String, ArrayList<Integer>> default_class_value = new HashMap<>();
 
         //Init Mage class
-        default_class_value.put("Mage", new ArrayList<>(Arrays.asList(100, 5, 200, 10, 1, 0)));
+        default_class_value.put("Mage", new ArrayList<>(Arrays.asList(100, 5, 200, 10, 1, 1)));
 
         //Init Warrior class
         default_class_value.put("Warrior", new ArrayList<>(Arrays.asList(200, 20, 100, 5, 10, 0)));
