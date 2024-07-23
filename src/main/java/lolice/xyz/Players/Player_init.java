@@ -20,10 +20,10 @@ public class Player_init {
 
             Characters_init player;
             if(ClassName.equals("Mage")) {
-                return new Characters_init("Mage", PlayerStats.get(0), PlayerStats.get(1), PlayerStats.get(2), PlayerStats.get(3), PlayerStats.get(4), PlayerStats.get(5), MageSkills);
+                return new Characters_init("Mage", PlayerStats.get(0), PlayerStats.get(1), PlayerStats.get(2), PlayerStats.get(3), PlayerStats.get(4), PlayerStats.get(5), MageSkills, 0, 0);
             }
             else if(ClassName.equals("Warrior")) {
-                return new Characters_init("Warrior", PlayerStats.get(0), PlayerStats.get(1), PlayerStats.get(2), PlayerStats.get(3), PlayerStats.get(4), PlayerStats.get(5), WarriorSkills);
+                return new Characters_init("Warrior", PlayerStats.get(0), PlayerStats.get(1), PlayerStats.get(2), PlayerStats.get(3), PlayerStats.get(4), PlayerStats.get(5), WarriorSkills, 0, 0);
             }
         }
             return null;
