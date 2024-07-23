@@ -2,6 +2,7 @@ package lolice.xyz.Players;
 
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
+import lolice.xyz.Location;
 
 import java.util.*;
 
@@ -18,8 +19,10 @@ public class Characters_init{
     private List<Skill> skills;
     private Leveling leveling;
     private List<Skill_stats> skill_stats;
+    private int x;
+    private int y;
 
-    public Characters_init(String Cname, int Cmaxhealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills) {
+    public Characters_init(String Cname, int Cmaxhealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills, int x, int y) {
         this.name = Cname;
         this.maxhealth = Cmaxhealth;
         this.health = Cmaxhealth;
@@ -34,6 +37,8 @@ public class Characters_init{
         skill_stats.add(new Skill_stats("Staff", name, 0));
         skill_stats.add(new Skill_stats("Books", name, 0));
         skill_stats.add(new Skill_stats("Magic gauntlet", name, 0));
+        this.x = x;
+        this.y = y;
     }
 
     //Getters
@@ -147,5 +152,83 @@ public class Characters_init{
         }
         return damage;
     }
+
+    //Show current location
+    public Location getCurrentLocation(Map<String, Location> Location) {
+        for (Map.Entry<String, Location> entry : Location.entrySet()) {
+            if (entry.getValue().x == x && entry.getValue().y == y) {
+                return entry.getValue();
+            }
+        } return new Location("Location not found", 0, 0, false);
+    }
+
+
+    //Show adjacent locations
+    public void showAdjacentLocations(Map<String, Location> Location) {
+        for (Map.Entry<String, Location> entry : Location.entrySet()) {
+            if (entry.getValue().x == x && entry.getValue().y == y + 1) {
+                if(entry.getValue().isUnlocked()) {
+                    System.out.println("North: " + entry.getKey() + " Unlocked");
+                } else {
+                    System.out.println("North: " + entry.getKey() + " Locked");
+                }
+
+            }
+            if (entry.getValue().x == x && entry.getValue().y == y - 1) {
+                if(entry.getValue().isUnlocked()) {
+                    System.out.println("South: " + entry.getKey() + " Unlocked");
+                } else {
+                    System.out.println("South: " + entry.getKey() + " Locked");
+                }
+            }
+            if (entry.getValue().x == x + 1 && entry.getValue().y == y) {
+                if(entry.getValue().isUnlocked()) {
+                    System.out.println("East: " + entry.getKey() + " Unlocked");
+                } else {
+                    System.out.println("East: " + entry.getKey() + " Locked");
+                }
+            }
+            if (entry.getValue().x == x - 1 && entry.getValue().y == y) {
+                if(entry.getValue().isUnlocked()) {
+                    System.out.println("West: " + entry.getKey() + " Unlocked");
+                } else {
+                    System.out.println("West: " + entry.getKey() + " Locked");
+                }
+            }
+        }
+    }
+    public List<Location> getAdjacentLocations(Map<String, Location> Location) {
+        List<Location> adjacentLocations = new ArrayList<>();
+        for (Map.Entry<String, Location> entry : Location.entrySet()) {
+            if (entry.getValue().x == x && entry.getValue().y == y + 1) {
+                adjacentLocations.add(entry.getValue());
+            }
+            if (entry.getValue().x == x && entry.getValue().y == y - 1) {
+                adjacentLocations.add(entry.getValue());
+            }
+            if (entry.getValue().x == x + 1 && entry.getValue().y == y) {
+                adjacentLocations.add(entry.getValue());
+            }
+            if (entry.getValue().x == x - 1 && entry.getValue().y == y) {
+                adjacentLocations.add(entry.getValue());
+            }
+        }
+        return adjacentLocations;
+    }
+
+    //Move
+    public void moveNorth() {
+        y += 1;
+    }
+    public void moveSouth() {
+        y -= 1;
+    }
+    public void moveEast() {
+        x += 1;
+    }
+    public void moveWest() {
+        x -= 1;
+    }
+
 }
 
