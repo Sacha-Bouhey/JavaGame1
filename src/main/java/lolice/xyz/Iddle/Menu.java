@@ -2,18 +2,23 @@ package lolice.xyz.Iddle;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
+import lolice.xyz.Location;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-    private final Characters_init player;
+    private Characters_init player;
 
     public Menu(Characters_init player) {
         this.player = player;
     }
 
-    public static void startMenu(Characters_init player) {
+    public void showStartMenu() {
+        startMenu(this.player);
+    }
+
+    private void startMenu(Characters_init player) {
         while (true) {
             Scanner UserChoice = new Scanner(System.in);
             System.out.println("Welcome to lolo's RPG");
@@ -41,7 +46,7 @@ public class Menu {
         }return null;
     }
 
-    public static void iddleMenu(Characters_init player) {
+    private void iddleMenu(Characters_init player) {
         while (true) {
             System.out.println("What do you want to do?");
             Scanner UserChoice = new Scanner(System.in);
@@ -49,20 +54,67 @@ public class Menu {
             System.out.println("2. Show current stats");
             System.out.println("3. Show current location");
             System.out.println("4. Show player inventory");
+            System.out.println("5. Upgrade your weapon skills");
             System.out.println("0. Return to main menu");
             System.out.println("Enter your choice: ");
             int Choice = UserChoice.nextInt();
             if (Choice == 1) {
-                System.out.println("Explore");
+                //TODO: Move all this to a function inside the player class
+                System.out.println("Which way do you want to explore ?");
+                player.showAdjacentLocations(Game_Start.Location_init);
+                System.out.println("Enter your choice: ");
+                String Direction = UserChoice.next();
+
+                if(Direction.equals("North")) {
+                    //Check if unlocked parameter is equal to false
+                    player.moveNorth();
+                    if(!player.getCurrentLocation(Game_Start.Location_init).isUnlocked()) {
+                        System.out.println("You can't go that way, the location is currently locked \n");
+                        player.moveSouth();
+                    }
+                }
+                else if(Direction.equals("South")) {
+                    player.moveSouth();
+                    if(!player.getCurrentLocation(Game_Start.Location_init).isUnlocked()) {
+                        System.out.println("You can't go that way, the location is currently locked \n");
+                        player.moveNorth();
+                    }
+                }
+                else if(Direction.equals("East")) {
+                    player.moveEast();
+                    if(!player.getCurrentLocation(Game_Start.Location_init).isUnlocked()) {
+                        System.out.println("You can't go that way, the location is currently locked \n");
+                        player.moveWest();
+                    }
+                }
+                else if(Direction.equals("West")) {
+                    player.moveWest();
+                    if(!player.getCurrentLocation(Game_Start.Location_init).isUnlocked()) {
+                        System.out.println("You can't go that way, the location is currently locked \n");
+                        player.moveEast();
+                    }
+                }
+                else {
+                    System.out.println("Invalid choice");
+                }
+                if(player.getCurrentLocation(Game_Start.Location_init).getLocationName().equals("Location not found")) {
+                    System.out.println("You can't go that way, location does not exist. \n");
+                }
             }
             else if (Choice == 2) {
                 player.showInfo();
             }
             else if (Choice == 3) {
-                System.out.println("Show current location");
+                System.out.println("Showing current location...");
+                System.out.println("Current location is: "+ player.getCurrentLocation(Game_Start.Location_init).getLocationName() + "\n");
+                player.showAdjacentLocations(Game_Start.Location_init);
+                System.out.println("\n");
             }
             else if (Choice == 4) {
                 System.out.println("Show current inventory");
+            }
+            else if (Choice == 5) {
+                playerSkillStatsUpgrade();
             }
             else if (Choice == 0) {
                 System.out.println("Returning to main menu...");
@@ -99,7 +151,6 @@ public class Menu {
             }
             else{
                 System.out.println("Invalid choice");
-                break;
             }
         }
     }
