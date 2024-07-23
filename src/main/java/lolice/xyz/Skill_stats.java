@@ -39,7 +39,15 @@ public class Skill_stats {
         else {
             System.out.println("Not enough stat points");
         }
+        if("Staff".equals(skill_stats.getSkill_name()) && skill_stats.getSkill_level() == 1) {
+            for(Skill skill : player.getSkills()) {
+                if("Fireball".equals(skill.getSkillName())) {
+                    skill.setActive();
+                    System.out.println("Unlocked skill: Fireball");
+                    break;
+                }
+            }
+        }
     }
-
 }
 
