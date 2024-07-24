@@ -1,23 +1,26 @@
 package lolice.xyz.NPC;
 
 import lolice.xyz.Enemies.Enemy_init;
+import lolice.xyz.Players.Characters;
+import lolice.xyz.Players.Characters_init;
 
 public class Quest {
     private final String name;
     private int expReward;
     private int goldReward;
     //todo: add reward system.
-    private String dialog;
-    private String mission;
+    private final String dialog;
+    private final String mission;
     private boolean completed;
     private int condition;
     private int conditionGoal;
 
-    public Quest(String name, int exp, int gold, String dialog, String mission) {
+    public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal) {
         this.name = name;
         this.expReward = exp;
         this.goldReward = gold;
         this.dialog = dialog;
+        this.condition = 0;
         this.mission = mission;
     }
 
@@ -67,7 +70,6 @@ public class Quest {
 
     public void showQuestDialog() {
         System.out.println("Name: " + name);
-        System.out.println("Mission: " + mission);
         System.out.println("Dialog: " + dialog);
         System.out.println("Condition: " + condition);
     }
@@ -78,25 +80,26 @@ public class Quest {
         System.out.println("Gold: " + goldReward);
     }
 
-    public void updateProgress() {
+    public void updateProgress(Characters_init player) {
         this.condition++;
         if (this.condition >= this.conditionGoal) {
             this.completed = true;
-            checkQuestCompletion();
+            checkQuestCompletion(player);
         }
     }
 
-    public void checkQuestCompletion() {
+    public void checkQuestCompletion(Characters_init player) {
         if (this.completed) {
             System.out.println("Quest completed!");
+            player.getLeveling().gainExp(this.expReward, player);
         } else {
             System.out.println("Quest not completed yet.");
         }
     }
 
-    public void defeatEnemyCondition(Enemy_init enemy) {
+    public void defeatEnemyCondition(Enemy_init enemy, Characters_init player) {
         if(!this.isCompleted() && this.mission.contains("Defeat "+enemy.getName())) {
-            this.updateProgress();
+            this.updateProgress(player);
         }
     }
 }
