@@ -5,6 +5,8 @@ import lolice.xyz.Players.Characters;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Players.Player_choice;
 import lolice.xyz.Players.Player_init;
+import lolice.xyz.NPC.Quest;
+import lolice.xyz.NPC.NPC;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +16,10 @@ public class Game_Start {
     public static Map <String, Location> Location_init = new HashMap<>();
     public static void main(String[] args) {
         initLocation();
+        initNPC();
         lore();
     }
+
     public static void initLocation() {
         Location_init = new HashMap<>();
         Location_init.put("Starting village", new Location("Stating village", 0, 0, true, "The starting village is a peaceful place for beginners to start their journey."));
@@ -23,6 +27,10 @@ public class Game_Start {
         Location_init.put("Cave", new Location("Cave", 0, 1, false, "The cave is a dark and mysterious place with hidden treasures."));
         Location_init.put("Castle", new Location("Castle", 0, -1, false, "The castle is a place where the king resides and holds great power."));
     }
+    public static void initNPC() {
+        Quest quests = new Quest("Defeat goblins","Defeat Goblin", 100, 10, "You must kill 10 goblins to complete this quest.", 1);
+    }
+
     public static void lore() {
         System.out.println("You woke up in a field, and you have a mission. You know it, but you can't remember...");
         System.out.println("You just remember something ! You were a: ");
