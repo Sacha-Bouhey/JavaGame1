@@ -41,11 +41,9 @@ public class Leveling {
         this.exptolevel = exptolevel;
     }
 
-    public static void gainExp(Enemy_init enemy, Characters_init player) {
-        if (enemy.getName().equals("Goblin")) {
-            player.getLeveling().setExp(player.getLeveling().getExp()+10);
-            System.out.println(player.getLeveling().getExp());
-        }
+    public static void gainExp(int exp, Characters_init player) {
+        player.getLeveling().setExp(player.getLeveling().getExp()+exp);
+        System.out.println(player.getLeveling().getExp());
         if (player.getLeveling().getExp() >= player.getLeveling().getExptolevel()) {
             LevelUp(player);
         }
@@ -54,12 +52,14 @@ public class Leveling {
     public static void LevelUp(Characters_init player) {
         Leveling playerleveling = player.getLeveling();
         playerleveling.setLevel(playerleveling.getLevel() + 1);
+        int currentXP = playerleveling.getExp() - playerleveling.getExptolevel();
+        playerleveling.setExp(currentXP);
         playerleveling.setExptolevel((int) (playerleveling.getExptolevel() * 1.2));
-        playerleveling.setExp(0);
 
         player.setStatpoint(player.getStatpoint() + 3);
 
         player.setMaxHealth(player.getHealth() + 10);
+        player.setHealth(player.getMaxhealth());
         player.setStrength(player.getStrength() + 5);
         player.setMana(player.getMana() + 10);
         player.setAgility(player.getAgility() + 5);
