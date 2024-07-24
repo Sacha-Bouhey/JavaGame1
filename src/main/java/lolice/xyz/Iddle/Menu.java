@@ -1,6 +1,7 @@
 package lolice.xyz.Iddle;
 import lolice.xyz.Battle;
 import lolice.xyz.Enemies.Enemy_init;
+import lolice.xyz.NPC.Quest;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
@@ -50,6 +51,7 @@ public class Menu {
     }
 
     private void iddleMenu(Characters_init player) {
+        player.addActiveQuest(new Quest("Defeat 1 goblin","Defeat Goblin", 100, 10, "You must kill 10 goblins to complete this quest.", 1));
         Skill skill1 = new Skill("Goblin punch", "Strength", 10, 10, true);
         List <Skill> skillist = new ArrayList<Skill>();
         skillist.add(skill1);
