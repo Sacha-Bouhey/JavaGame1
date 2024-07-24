@@ -1,9 +1,12 @@
 package lolice.xyz.Iddle;
+import lolice.xyz.Battle;
+import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
 import lolice.xyz.Location;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -47,6 +50,12 @@ public class Menu {
     }
 
     private void iddleMenu(Characters_init player) {
+        Skill skill1 = new Skill("Goblin punch", "Strength", 10, 10, true);
+        List <Skill> skillist = new ArrayList<Skill>();
+        skillist.add(skill1);
+        Enemy_init enemy = new Enemy_init("Goblin", 10, 10, 10, 10, skillist);
+        Battle battle = new Battle(player, enemy);
+        battle.Start();
         while (true) {
             System.out.println("What do you want to do?");
             Scanner UserChoice = new Scanner(System.in);
@@ -55,6 +64,7 @@ public class Menu {
             System.out.println("3. Show current location");
             System.out.println("4. Show player inventory");
             System.out.println("5. Upgrade your weapon skills");
+            System.out.println("6. Explore current location");
             System.out.println("0. Return to main menu");
             System.out.println("Enter your choice: ");
             int Choice = UserChoice.nextInt();
@@ -115,6 +125,10 @@ public class Menu {
             }
             else if (Choice == 5) {
                 playerSkillStatsUpgrade();
+            }
+            else if (Choice == 6) {
+                System.out.println("Exploring current location...");
+                player.getCurrentLocation(Game_Start.Location_init).showLocationInfo();
             }
             else if (Choice == 0) {
                 System.out.println("Returning to main menu...");

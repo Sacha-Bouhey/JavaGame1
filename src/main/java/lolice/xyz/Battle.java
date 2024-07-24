@@ -35,6 +35,7 @@ public class Battle {
             if (isBattleOver()) {
                 System.out.println("You have gained experience points");
                 Leveling.gainExp(enemies, player);
+                player.updateAllQuests(enemies);
                 break;
             }
             enemiesTurn();

@@ -1,8 +1,10 @@
 package lolice.xyz.Players;
 
+import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
 import lolice.xyz.Location;
+import lolice.xyz.NPC.Quest;
 
 import java.util.*;
 
@@ -19,6 +21,8 @@ public class Characters_init{
     private List<Skill> skills;
     private Leveling leveling;
     private List<Skill_stats> skill_stats;
+    private int gold;
+    private List<Quest> activeQuests;
     private int x;
     private int y;
 
@@ -39,6 +43,8 @@ public class Characters_init{
         skill_stats.add(new Skill_stats("Magic gauntlet", name, 0));
         this.x = x;
         this.y = y;
+        this.gold = 0;
+        this.activeQuests = new ArrayList<>();
     }
 
     //Getters
@@ -85,6 +91,14 @@ public class Characters_init{
         return skills;
     }
 
+    public int getGold() {
+        return gold;
+    }
+    
+    public List<Quest> getActiveQuests() {
+        return activeQuests;
+    }
+
     // Setters
     public void setMaxHealth(int newMaxHealth) {
         this.maxhealth = newMaxHealth;
@@ -119,6 +133,14 @@ public class Characters_init{
 
     public void setLeveling(Leveling leveling) {
         this.leveling = leveling;
+    }
+
+    public void setGold(int gold) {
+        this.gold += gold;
+    }
+
+    public void setActiveQuests(List<Quest> activeQuests) {
+        this.activeQuests = activeQuests;
     }
 
     //Show info
@@ -159,7 +181,7 @@ public class Characters_init{
             if (entry.getValue().x == x && entry.getValue().y == y) {
                 return entry.getValue();
             }
-        } return new Location("Location not found", 0, 0, false);
+        } return new Location("Location not found", 0, 0, false, "Null");
     }
 
 
@@ -230,5 +252,28 @@ public class Characters_init{
         x -= 1;
     }
 
+    //Add active quest
+    public void addActiveQuest(Quest quest) {
+        activeQuests.add(quest);
+    }
+
+    //Print current active guests
+    public void showActiveQuests() {
+        for (Quest quests : activeQuests) {
+            if (!quests.isCompleted()) {
+                System.out.println(quests.getName());
+            }
+        }
+    }
+
+    //Update all quests
+    public void updateAllQuests(Enemy_init enemy) {
+        if (activeQuests.isEmpty()) {
+            return;
+        }
+        for(Quest quest : activeQuests) {
+            quest.defeatEnemyCondition(enemy);
+        }
+    }
 }
 
