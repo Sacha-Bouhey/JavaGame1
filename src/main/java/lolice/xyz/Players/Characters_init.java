@@ -272,7 +272,7 @@ public class Characters_init{
             return;
         }
         for(Quest quest : activeQuests) {
-            quest.defeatEnemyCondition(enemy);
+            quest.defeatEnemyCondition(enemy, this);
         }
     }
 }
