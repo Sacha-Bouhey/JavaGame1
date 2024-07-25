@@ -1,16 +1,17 @@
 package lolice.xyz;
 
+import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.NPC.NPC;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Location {
-    public String name;
-    public int x;
-    public int y;
+    private String name;
+    private int x;
+    private int y;
     private String description;
-    public boolean unlocked;
-    public List<NPC> npc;
+    private boolean unlocked;
 
     public Location(String name, int x, int y, boolean unlocked, String description) {
         this.name = name;
@@ -29,6 +30,18 @@ public class Location {
         return unlocked;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     //setters
     public void setUnlocked(){
         this.unlocked = true;
@@ -38,12 +51,73 @@ public class Location {
         this.unlocked = false;
     }
 
+    public static class Wilderness extends Location {
+        private List<Enemy_init> enemies;
+        public Wilderness(String name, int x, int y, boolean unlocked, String description, List<Enemy_init> enemies) {
+            super(name, x, y, unlocked, description);
+            this.enemies = enemies;
+        }
+
+        public List<Enemy_init> getEnemies() {
+            return this.enemies;
+        }
+
+        public Enemy_init selectRandomEnemy() {
+            int randomIndex = (int) (Math.random() * enemies.size());
+            return new Enemy_init(enemies.get(randomIndex));
+        }
+    }
+
     public void showLocationInfo() {
         System.out.println("Name: " + name);
         System.out.println("Description: " + description);
-        System.out.println("Unlocked: " + unlocked);
-        for (NPC npc : npc) {
-            npc.showNPCInfo();
+        System.out.println("Unlocked: " + unlocked + "\n");
+    }
+
+    public class Dungeon extends Location {
+        private List<Enemy_init> enemies;
+        public Dungeon(String name, int x, int y, boolean unlocked, String description, List<Enemy_init> enemies) {
+            super(name, x, y, unlocked, description);
+            this.enemies = enemies;
+        }
+
+        public List<Enemy_init> getEnemies() {
+            return this.enemies;
+        }
+    }
+
+    public static class Village extends Location {
+        private List<NPC> npc;
+        public Village(String name, int x, int y, boolean unlocked, String description) {
+            super(name, x, y, unlocked, description);
+            this.npc = new ArrayList<>();
+        }
+
+        public List<NPC> getNPC() {
+            return npc;
+        }
+
+        @Override
+        public void showLocationInfo() {
+            System.out.println("Name: " + getLocationName());
+            System.out.println("Description: " + getDescription());
+            System.out.println("Unlocked: " + isUnlocked() + "\n");
+            if(npc != null) {
+                for (NPC npc : npc) {
+                    System.out.println("NPCs in this location: ");
+                    npc.showNPCInfo();
+                }
+            }
+        }
+
+        public void showNPCInfo() {
+            for(NPC npc : npc) {
+                npc.showNPCInfo();
+            }
+        }
+
+        public void addNPC(NPC npc) {
+            this.npc.add(npc);
         }
     }
 }
