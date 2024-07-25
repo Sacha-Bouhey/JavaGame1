@@ -13,7 +13,7 @@ public class Quest {
     private final String mission;
     private boolean completed;
     private int condition;
-    private int conditionGoal;
+    private final int conditionGoal;
 
     public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal) {
         this.name = name;
@@ -22,6 +22,7 @@ public class Quest {
         this.dialog = dialog;
         this.condition = 0;
         this.mission = mission;
+        this.conditionGoal = conditionGoal;
     }
 
     //getters
@@ -51,6 +52,10 @@ public class Quest {
 
     public int getCondition() {
         return condition;
+    }
+
+    public int getConditionGoal() {
+        return conditionGoal;
     }
 
     //setters
