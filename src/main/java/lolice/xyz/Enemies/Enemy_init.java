@@ -21,6 +21,16 @@ public class Enemy_init {
         this.defence = Edefence;
         this.skills = Eskills;
     }
+
+    public Enemy_init(Enemy_init enemy) {
+        this.name = enemy.name;
+        this.health = enemy.health;
+        this.strength = enemy.strength;
+        this.mana = enemy.mana;
+        this.defence = enemy.defence;
+        this.skills = enemy.skills; // Assuming skills are immutable or shared
+    }
+
     //Getters
     public String getName() {
         return name;
