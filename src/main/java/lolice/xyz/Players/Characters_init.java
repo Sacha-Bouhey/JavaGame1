@@ -1,6 +1,7 @@
 package lolice.xyz.Players;
 
 import lolice.xyz.Enemies.Enemy_init;
+import lolice.xyz.NPC.NPC;
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
 import lolice.xyz.Location;
@@ -25,6 +26,7 @@ public class Characters_init{
     private List<Quest> activeQuests;
     private int x;
     private int y;
+    private List<Location> locations;
 
     public Characters_init(String Cname, int Cmaxhealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills, int x, int y) {
         this.name = Cname;
@@ -45,6 +47,7 @@ public class Characters_init{
         this.y = y;
         this.gold = 0;
         this.activeQuests = new ArrayList<>();
+        this.locations = new ArrayList<>();
     }
 
     //Getters
@@ -79,6 +82,7 @@ public class Characters_init{
     public int getStatpoint() {
         return statpoint;
     }
+
     public Leveling getLeveling() {
         return leveling;
     }
@@ -99,10 +103,19 @@ public class Characters_init{
         return activeQuests;
     }
 
+    public List<Location> getLocations() {
+        return locations;
+    }
+
     // Setters
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
     public void setMaxHealth(int newMaxHealth) {
         this.maxhealth = newMaxHealth;
     }
+
     public void setHealth(int newHealth) {
         this.health = newHealth;
     }
@@ -176,63 +189,65 @@ public class Characters_init{
     }
 
     //Show current location
-    public Location getCurrentLocation(Map<String, Location> Location) {
-        for (Map.Entry<String, Location> entry : Location.entrySet()) {
-            if (entry.getValue().x == x && entry.getValue().y == y) {
-                return entry.getValue();
+    public Location getCurrentLocation() {
+        for (Location location : this.locations) {
+            if (location.getX() == x && location.getY() == y) {
+                return location;
             }
         } return new Location("Location not found", 0, 0, false, "Null");
     }
 
 
     //Show adjacent locations
-    public void showAdjacentLocations(Map<String, Location> Location) {
-        for (Map.Entry<String, Location> entry : Location.entrySet()) {
-            if (entry.getValue().x == x && entry.getValue().y == y + 1) {
-                if(entry.getValue().isUnlocked()) {
-                    System.out.println("North: " + entry.getKey() + " Unlocked");
+    public void showAdjacentLocations(List<Location> locationList) {
+        System.out.println("Adjacent locations: ");
+        for (Location location : locationList) {
+            if (location.getX() == x && location.getY() == y + 1) {
+                if(location.isUnlocked()) {
+                    System.out.println("North: " + location.getLocationName() + " (Unlocked)");
                 } else {
-                    System.out.println("North: " + entry.getKey() + " Locked");
+                    System.out.println("North: " + location.getLocationName() + " (Locked)");
                 }
 
             }
-            if (entry.getValue().x == x && entry.getValue().y == y - 1) {
-                if(entry.getValue().isUnlocked()) {
-                    System.out.println("South: " + entry.getKey() + " Unlocked");
+            if (location.getX() == x && location.getY() == y - 1) {
+                if(location.isUnlocked()) {
+                    System.out.println("South: " + location.getLocationName() + " (Unlocked)");
                 } else {
-                    System.out.println("South: " + entry.getKey() + " Locked");
+                    System.out.println("South: " + location.getLocationName() + " (Locked)");
                 }
             }
-            if (entry.getValue().x == x + 1 && entry.getValue().y == y) {
-                if(entry.getValue().isUnlocked()) {
-                    System.out.println("East: " + entry.getKey() + " Unlocked");
+            if (location.getX() == x + 1 && location.getY() == y) {
+                if(location.isUnlocked()) {
+                    System.out.println("East: " + location.getLocationName() + " (Unlocked)");
                 } else {
-                    System.out.println("East: " + entry.getKey() + " Locked");
+                    System.out.println("East: " + location.getLocationName() + " (Locked)");
                 }
             }
-            if (entry.getValue().x == x - 1 && entry.getValue().y == y) {
-                if(entry.getValue().isUnlocked()) {
-                    System.out.println("West: " + entry.getKey() + " Unlocked");
+            if (location.getX() == x - 1 && location.getY() == y) {
+                if(location.isUnlocked()) {
+                    System.out.println("West: " + location.getLocationName() + " (Unlocked)");
                 } else {
-                    System.out.println("West: " + entry.getKey() + " Locked");
+                    System.out.println("West: " + location.getLocationName() + " (Locked)");
                 }
             }
         }
     }
-    public List<Location> getAdjacentLocations(Map<String, Location> Location) {
+
+    public List<Location> getAdjacentLocations(List<Location> locationList) {
         List<Location> adjacentLocations = new ArrayList<>();
-        for (Map.Entry<String, Location> entry : Location.entrySet()) {
-            if (entry.getValue().x == x && entry.getValue().y == y + 1) {
-                adjacentLocations.add(entry.getValue());
+        for (Location location : locationList) {
+            if (location.getX() == x && location.getY() == y + 1) {
+                adjacentLocations.add(location);
             }
-            if (entry.getValue().x == x && entry.getValue().y == y - 1) {
-                adjacentLocations.add(entry.getValue());
+            if (location.getX() == x && location.getY() == y - 1) {
+                adjacentLocations.add(location);
             }
-            if (entry.getValue().x == x + 1 && entry.getValue().y == y) {
-                adjacentLocations.add(entry.getValue());
+            if (location.getX() == x + 1 && location.getY() == y) {
+                adjacentLocations.add(location);
             }
-            if (entry.getValue().x == x - 1 && entry.getValue().y == y) {
-                adjacentLocations.add(entry.getValue());
+            if (location.getX() == x - 1 && location.getY() == y) {
+                adjacentLocations.add(location);
             }
         }
         return adjacentLocations;
@@ -252,6 +267,56 @@ public class Characters_init{
         x -= 1;
     }
 
+    public void playerMove() {
+        while(true) {
+            Scanner UserChoice = new Scanner(System.in);
+            System.out.println("Which way do you want to explore ?");
+            this.showAdjacentLocations(this.locations);
+            System.out.println("Enter your choice: ");
+            String Direction = UserChoice.next();
+
+            if(Direction.equals("North")) {
+                //Check if unlocked parameter is equal to false
+                this.moveNorth();
+                if (!this.getCurrentLocation().isUnlocked()) {
+                    System.out.println("You can't go that way, the location is currently locked \n");
+                    this.moveSouth();
+                    break;
+                }
+            } else if (Direction.equals("South")) {
+                this.moveSouth();
+                if (!this.getCurrentLocation().isUnlocked()) {
+                    System.out.println("You can't go that way, the location is currently locked \n");
+                    this.moveNorth();
+                    break;
+                }
+            } else if (Direction.equals("East")) {
+                this.moveEast();
+                if (!this.getCurrentLocation().isUnlocked()) {
+                    System.out.println("You can't go that way, the location is currently locked \n");
+                    this.moveWest();
+                    break;
+                }
+            } else if (Direction.equals("West")) {
+                this.moveWest();
+                if (!this.getCurrentLocation().isUnlocked()) {
+                    System.out.println("You can't go that way, the location is currently locked \n");
+                    this.moveEast();
+                    break;
+                }
+            } else {
+                System.out.println("Invalid choice");
+            }
+            if (this.getCurrentLocation().getLocationName().equals("Location not found")) {
+                System.out.println("You can't go that way, location does not exist. \n");
+
+            } else {
+                System.out.println("You are now in: " + this.getCurrentLocation().getLocationName() + "\n");
+                break;
+            }
+        }
+    }
+
     //Add active quest
     public void addActiveQuest(Quest quest) {
         activeQuests.add(quest);
@@ -262,6 +327,8 @@ public class Characters_init{
         for (Quest quests : activeQuests) {
             if (!quests.isCompleted()) {
                 System.out.println(quests.getName());
+                System.out.println(quests.getMission());
+                System.out.println("Progress: " + quests.getCondition() + "/" + quests.getConditionGoal() + "\n");
             }
         }
     }
@@ -273,6 +340,47 @@ public class Characters_init{
         }
         for(Quest quest : activeQuests) {
             quest.defeatEnemyCondition(enemy, this);
+        }
+    }
+
+    public void talkToNPC() {
+        System.out.println("Who do you want to talk to?");
+        if(this.getCurrentLocation() instanceof Location.Village) {
+            ((Location.Village) this.getCurrentLocation()).showNPCInfo();
+
+            Scanner UserChoice2 = new Scanner(System.in);
+            System.out.println("Enter your choice: ");
+            String Choice2 = UserChoice2.nextLine();
+            for (NPC npc : ((Location.Village) this.getCurrentLocation()).getNPC()) {
+                if (Choice2.equals(npc.getName())) {
+                    System.out.println(npc.getDialog());
+                    if (npc.getQuest() != null) {
+                        Scanner UserChoice3 = new Scanner(System.in);
+                        System.out.println("Do you want to accept the quest?");
+                        System.out.println("1. Yes");
+                        System.out.println("2. No");
+                        System.out.println("Enter your choice: ");
+                        int Choice3 = UserChoice3.nextInt();
+                        if (Choice3 == 1) {
+                            npc.questAccepted(this);
+                        } else if (Choice3 == 2) {
+                            System.out.println("Quest declined");
+                        } else {
+                            System.out.println("Invalid choice");
+                        }
+                    }
+                } else {
+                    System.out.println("There's no NPC named: " + Choice2);
+                }
+            }
+        }else{System.out.println("There are no NPCs in this location");}
+    }
+
+    public void unlockLocation(String locationName) {
+        for(Location location : this.locations) {
+            if(location.getLocationName().equals(locationName)) {
+                location.setUnlocked();
+            }
         }
     }
 }
