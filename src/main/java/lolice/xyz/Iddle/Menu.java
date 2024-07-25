@@ -1,14 +1,8 @@
 package lolice.xyz.Iddle;
 import lolice.xyz.Battle;
-import lolice.xyz.Enemies.Enemy_init;
-import lolice.xyz.NPC.Quest;
-import lolice.xyz.Players.Characters_init;
-import lolice.xyz.Skill;
-import lolice.xyz.Skill_stats;
 import lolice.xyz.Location;
-
-import java.util.ArrayList;
-import java.util.List;
+import lolice.xyz.Players.Characters_init;
+import lolice.xyz.Skill_stats;
 import java.util.Scanner;
 
 public class Menu {
@@ -51,13 +45,6 @@ public class Menu {
     }
 
     private void iddleMenu(Characters_init player) {
-        player.addActiveQuest(new Quest("Defeat 1 goblin","Defeat Goblin", 100, 10, "You must kill 10 goblins to complete this quest.", 1));
-        Skill skill1 = new Skill("Goblin punch", "Strength", 10, 10, true);
-        List <Skill> skillist = new ArrayList<Skill>();
-        skillist.add(skill1);
-        Enemy_init enemy = new Enemy_init("Goblin", 10, 10, 10, 10, skillist);
-        Battle battle = new Battle(player, enemy);
-        battle.Start();
         while (true) {
             System.out.println("What do you want to do?");
             Scanner UserChoice = new Scanner(System.in);
@@ -65,72 +52,65 @@ public class Menu {
             System.out.println("2. Show current stats");
             System.out.println("3. Show current location");
             System.out.println("4. Show player inventory");
-            System.out.println("5. Upgrade your weapon skills");
-            System.out.println("6. Explore current location");
+            System.out.println("5. Show active quests");
+            System.out.println("6. Upgrade your weapon skills");
+            System.out.println("7. Explore current location");
+            System.out.println("8. Talk to an NPC");
             System.out.println("0. Return to main menu");
             System.out.println("Enter your choice: ");
             int Choice = UserChoice.nextInt();
-            if (Choice == 1) {
-                //TODO: Move all this to a function inside the player class
-                System.out.println("Which way do you want to explore ?");
-                player.showAdjacentLocations(Game_Start.Location_init);
-                System.out.println("Enter your choice: ");
-                String Direction = UserChoice.next();
 
-                if(Direction.equals("North")) {
-                    //Check if unlocked parameter is equal to false
-                    player.moveNorth();
-                    if(!player.getCurrentLocation(Game_Start.Location_init).isUnlocked()) {
-                        System.out.println("You can't go that way, the location is currently locked \n");
-                        player.moveSouth();
-                    }
-                }
-                else if(Direction.equals("South")) {
-                    player.moveSouth();
-                    if(!player.getCurrentLocation(Game_Start.Location_init).isUnlocked()) {
-                        System.out.println("You can't go that way, the location is currently locked \n");
-                        player.moveNorth();
-                    }
-                }
-                else if(Direction.equals("East")) {
-                    player.moveEast();
-                    if(!player.getCurrentLocation(Game_Start.Location_init).isUnlocked()) {
-                        System.out.println("You can't go that way, the location is currently locked \n");
-                        player.moveWest();
-                    }
-                }
-                else if(Direction.equals("West")) {
-                    player.moveWest();
-                    if(!player.getCurrentLocation(Game_Start.Location_init).isUnlocked()) {
-                        System.out.println("You can't go that way, the location is currently locked \n");
-                        player.moveEast();
-                    }
-                }
-                else {
-                    System.out.println("Invalid choice");
-                }
-                if(player.getCurrentLocation(Game_Start.Location_init).getLocationName().equals("Location not found")) {
-                    System.out.println("You can't go that way, location does not exist. \n");
-                }
+
+
+            // Player actions
+            if (Choice == 1) {
+                player.playerMove();
+                iddleMenu(player);
             }
             else if (Choice == 2) {
                 player.showInfo();
             }
             else if (Choice == 3) {
                 System.out.println("Showing current location...");
-                System.out.println("Current location is: "+ player.getCurrentLocation(Game_Start.Location_init).getLocationName() + "\n");
-                player.showAdjacentLocations(Game_Start.Location_init);
+                System.out.println("Your current location is: "+ player.getCurrentLocation().getLocationName() + "\n");
+                player.showAdjacentLocations(player.getLocations());
                 System.out.println("\n");
             }
             else if (Choice == 4) {
                 System.out.println("Show current inventory");
             }
             else if (Choice == 5) {
-                playerSkillStatsUpgrade();
+                System.out.println("Showing active quests...");
+                player.showActiveQuests();
             }
             else if (Choice == 6) {
-                System.out.println("Exploring current location...");
-                player.getCurrentLocation(Game_Start.Location_init).showLocationInfo();
+                playerSkillStatsUpgrade();
+            }
+            else if (Choice == 7) {
+                System.out.println("If you are une the wilderness, you will encounter enemies. Are you sure you want to explore? (y/n)");
+                Scanner UserChoice2 = new Scanner(System.in);
+                String Choice2 = UserChoice2.nextLine();
+                if(Choice2.equals("y")) {
+                    System.out.println("Exploring current location...");
+                    player.getCurrentLocation().showLocationInfo();
+                    if(player.getCurrentLocation() instanceof Location.Village) {
+                        continue;
+                    }
+                    else if(player.getCurrentLocation() instanceof Location.Wilderness) {
+                        Battle battle = new Battle(player, ((Location.Wilderness) player.getCurrentLocation()).selectRandomEnemy());
+                        battle.Start();
+                    }
+                    else if(player.getCurrentLocation() instanceof Location.Dungeon) {
+                        continue;
+                    }
+                }
+                else {
+                    System.out.println("Returning to main menu...");
+                    startMenu(player);
+                }
+            }
+            else if (Choice == 8) {
+                player.talkToNPC();
             }
             else if (Choice == 0) {
                 System.out.println("Returning to main menu...");
@@ -141,6 +121,11 @@ public class Menu {
             }
         }
     }
+
+
+
+
+
     public void playerSkillStatsUpgrade() {
         while (true) {
             System.out.println("What do you want to upgrade?");
