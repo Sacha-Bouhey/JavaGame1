@@ -1,8 +1,8 @@
 package lolice.xyz.NPC;
 
 import lolice.xyz.Enemies.Enemy_init;
-import lolice.xyz.Players.Characters;
 import lolice.xyz.Players.Characters_init;
+import lolice.xyz.Players.Leveling;
 
 public class Quest {
     private final String name;
@@ -69,6 +69,7 @@ public class Quest {
 
     public void showQuestInfo() {
         System.out.println("Name: " + name);
+        System.out.println("Dialog: " + mission);
         System.out.println("Exp: " + expReward);
         System.out.println("Gold: " + goldReward);
     }
@@ -79,15 +80,10 @@ public class Quest {
         System.out.println("Condition: " + condition);
     }
 
-    public void showQuestReward() {
-        System.out.println("Name: " + name);
-        System.out.println("Exp: " + expReward);
-        System.out.println("Gold: " + goldReward);
-    }
-
     public void updateProgress(Characters_init player) {
         this.condition++;
         if (this.condition >= this.conditionGoal) {
+            this.condition = this.conditionGoal;
             this.completed = true;
             checkQuestCompletion(player);
         }
@@ -96,7 +92,7 @@ public class Quest {
     public void checkQuestCompletion(Characters_init player) {
         if (this.completed) {
             System.out.println("Quest completed!");
-            player.getLeveling().gainExp(this.expReward, player);
+            Leveling.gainExp(this.expReward, player);
         } else {
             System.out.println("Quest not completed yet.");
         }
