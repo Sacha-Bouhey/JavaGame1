@@ -1,6 +1,7 @@
 package lolice.xyz.Players;
 
 import lolice.xyz.Enemies.Enemy_init;
+import lolice.xyz.Items.Inventory;
 import lolice.xyz.NPC.NPC;
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
@@ -27,6 +28,7 @@ public class Characters_init{
     private int x;
     private int y;
     private List<Location> locations;
+    private Inventory inventory;
 
     public Characters_init(String Cname, int Cmaxhealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills, int x, int y) {
         this.name = Cname;
@@ -48,6 +50,7 @@ public class Characters_init{
         this.gold = 0;
         this.activeQuests = new ArrayList<>();
         this.locations = new ArrayList<>();
+        this.inventory = new Inventory(10);
     }
 
     //Getters
@@ -105,6 +108,10 @@ public class Characters_init{
 
     public List<Location> getLocations() {
         return locations;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     // Setters
@@ -345,35 +352,20 @@ public class Characters_init{
 
     public void talkToNPC() {
         System.out.println("Who do you want to talk to?");
-        if(this.getCurrentLocation() instanceof Location.Village) {
+        if (this.getCurrentLocation() instanceof Location.Village) {
             ((Location.Village) this.getCurrentLocation()).showNPCInfo();
 
             Scanner UserChoice2 = new Scanner(System.in);
             System.out.println("Enter your choice: ");
             String Choice2 = UserChoice2.nextLine();
+
+
             for (NPC npc : ((Location.Village) this.getCurrentLocation()).getNPC()) {
                 if (Choice2.equals(npc.getName())) {
-                    System.out.println(npc.getDialog());
-                    if (npc.getQuest() != null) {
-                        Scanner UserChoice3 = new Scanner(System.in);
-                        System.out.println("Do you want to accept the quest?");
-                        System.out.println("1. Yes");
-                        System.out.println("2. No");
-                        System.out.println("Enter your choice: ");
-                        int Choice3 = UserChoice3.nextInt();
-                        if (Choice3 == 1) {
-                            npc.questAccepted(this);
-                        } else if (Choice3 == 2) {
-                            System.out.println("Quest declined");
-                        } else {
-                            System.out.println("Invalid choice");
-                        }
-                    }
-                } else {
-                    System.out.println("There's no NPC named: " + Choice2);
-                }
+                    this.npcDialog(npc);
+                }else {System.out.println("There's no NPC named: " + Choice2);}
             }
-        }else{System.out.println("There are no NPCs in this location");}
+        }
     }
 
     public void unlockLocation(String locationName) {
@@ -383,5 +375,87 @@ public class Characters_init{
             }
         }
     }
+
+    public void acceptQuest(NPC npc, int choice) {
+            if (npc.getQuest() != null) {
+                Quest quest = npc.getQuest().get(choice - 1);
+                quest.showQuestInfo();
+                Scanner UserChoice3 = new Scanner(System.in);
+                System.out.println("Do you want to accept the quest?");
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                System.out.println("Enter your choice: ");
+                int Choice3 = UserChoice3.nextInt();
+                if (Choice3 == 1) {
+                    npc.questAccepted(this, quest);
+                } else if (Choice3 == 2) {
+                    System.out.println("Quest declined");
+                } else {
+                    System.out.println("Invalid choice");
+                }
+            }
+        }
+
+        public void npcShop(NPC npc) {
+            npc.getShop().showShop();
+            if(!npc.getShop().isEmpty()) {
+                System.out.println("You have " + this.getGold() + " gold");
+
+                Scanner UserChoice4 = new Scanner(System.in);
+                System.out.println("Do you want to buy something?");
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                if(UserChoice4.nextInt() == 1) {
+                    npc.getShop().buyItem(this);
+                    npcDialog(npc);
+                }
+                else if(UserChoice4.nextInt() == 2) {
+                    System.out.println("You left the shop");
+                    npcDialog(npc);
+                } else {System.out.println("Invalid choice");}
+            }
+        }
+
+
+
+        public void npcDialog(NPC npc){
+            System.out.println(npc.getDialog());
+            Scanner UserChoice3 = new Scanner(System.in);
+            System.out.println("What do you want to do?");
+            System.out.println("1. Show quests");
+            System.out.println("2. Enter shop");
+            System.out.println("0. Exit");
+
+            int choice = UserChoice3.nextInt();
+
+            if(choice == 1) {
+                this.choiceQuest(npc);
+            }
+            else if(choice == 2) {
+                this.npcShop(npc);
+            }
+            else if(choice == 0) {
+                System.out.println("You left the NPC");
+            }
+            else {
+                System.out.println("Invalid choice");
+            }
+        }
+    public void choiceQuest(NPC npc) {
+        System.out.println("Which quest do you want to choose?");
+        int count = 0;
+        for (Quest quest : npc.getQuest()) {
+            count++;
+            System.out.println(count + quest.getName());
+        }
+        Scanner UserChoice = new Scanner(System.in);
+        System.out.println("Enter your choice: ");
+        int Choice = UserChoice.nextInt();
+        this.acceptQuest(npc, Choice);
+    }
 }
+
+
+
+
 
