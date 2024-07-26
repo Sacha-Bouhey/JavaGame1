@@ -1,6 +1,10 @@
 package lolice.xyz.NPC;
 
+import lolice.xyz.Items.Inventory;
 import lolice.xyz.Players.Characters_init;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NPC {
     private final String name;
@@ -8,7 +12,8 @@ public class NPC {
     private int damage;
     private int gold;
     private String dialog;
-    private Quest quest;
+    private List<Quest> quests;
+    private Inventory.Shop shop;
 
     public NPC(String name, int hp, int damage, int level, int gold, String dialog) {
         this.name = name;
@@ -16,6 +21,8 @@ public class NPC {
         this.damage = damage;
         this.gold = gold;
         this.dialog = dialog;
+        this.shop = new Inventory.Shop(20);
+        this.quests = new ArrayList<>();
     }
 
     //getters
@@ -39,8 +46,12 @@ public class NPC {
         return dialog;
     }
 
-    public Quest getQuest() {
-        return quest;
+    public List<Quest> getQuest() {
+        return quests;
+    }
+
+    public Inventory.Shop getShop() {
+        return shop;
     }
 
     //setters
@@ -63,15 +74,23 @@ public class NPC {
         System.out.println("Gold: " + gold + "\n");
     }
 
-    public void showNPCQuest() {
-        quest.showQuestInfo();
+    public void showNPCQuestName() {
+        for (Quest quest : quests) {
+            System.out.println(quest.getName());
+        }
+    }
+
+    public void showNPCQuestInfo() {
+        for (Quest quest : quests) {
+            quest.showQuestInfo();
+        }
     }
 
     public void addQuest(Quest quest) {
-        this.quest = quest;
+        this.quests.add(quest);
     }
 
-    public void questAccepted(Characters_init player) {
+    public void questAccepted(Characters_init player, Quest quest) {
         System.out.println("Quest accepted: " + quest.getName());
         player.addActiveQuest(quest);
         questUnlockable(quest,player);
