@@ -42,11 +42,16 @@ public class Game_Start {
         Location_init.add(new Location("Cave", 0, 1, false, "The cave is a dark and mysterious place with hidden treasures."));
         Location_init.add(new Location("Castle", 0, -1, false, "The castle is a place where the king resides and holds great power."));
     }
+
     public static void initNPC() {
         Quest_init.put("Tutorial 1",new Quest("Tutorial 1: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest.", 2));
 
-        NPC_init.put("Tutorial villager", new NPC("Tutorial villager", 100, 10, 1,1000,"Hello adventurer! " +
-                "I have a quest for you. You must defeat 2 goblins to complete this quest. \n " + "You can find goblins in the forest. Good luck!"));
+        NPC_init.put("Tutorial villager", new NPC("Tutorial villager", 100, 10, 1,1000, """
+                Hello adventurer! \
+                I have a quest for you. You must defeat 2 goblins to complete this quest.\s
+                 You can find goblins in the forest. Good luck!\
+                Oh, and also if you have some gold you can buy things in my shop !\s
+                """));
 
         NPC_init.get("Tutorial villager").addQuest(Quest_init.get("Tutorial 1"));
     }
