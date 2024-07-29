@@ -77,7 +77,8 @@ public class Menu {
                 System.out.println("\n");
             }
             else if (Choice == 4) {
-                System.out.println("Show current inventory");
+                System.out.println("Showing current inventory...");
+                player.inventoryMenu();
             }
             else if (Choice == 5) {
                 System.out.println("Showing active quests...");
