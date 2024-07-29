@@ -1,5 +1,7 @@
 package lolice.xyz.Items;
 
+import lolice.xyz.Skill;
+
 public class Items {
     private final String name;
     private final String description;
@@ -66,6 +68,38 @@ public class Items {
         public int getRequiredLevel() {
             return requiredLevel;
         }
+
+        public static class mageWeapon extends Weapon {
+            private final int mana;
+            private final int requiredMana;
+            private final Skill weaponSkill;
+
+            //I use 2 constructors here to make it easier to create a weapon with or without a skill
+            public mageWeapon(String name, String description, int sellPrice, int buyPrice, boolean stackable, int damage, int durability, int level, int requiredLevel, int mana, int requiredMana) {
+                this(name, description, sellPrice, buyPrice, stackable, damage, durability, level, requiredLevel, mana, requiredMana, null);
+            }
+
+
+            public mageWeapon(String name, String description, int sellPrice, int buyPrice, boolean stackable, int damage, int durability, int level, int requiredLevel, int mana, int requiredMana, Skill weaponSkill) {
+                super(name, description, sellPrice, buyPrice, stackable, damage, durability, level, requiredLevel);
+                this.mana = mana;
+                this.requiredMana = requiredMana;
+                this.weaponSkill = weaponSkill;
+            }
+
+            //getters
+            public int getMana() {
+                return mana;
+            }
+
+            public int getRequiredMana() {
+                return requiredMana;
+            }
+
+            public Skill getWeaponSkill() {
+                return weaponSkill;
+            }
+        }
     }
 
     public static class Armor extends Items {
@@ -97,6 +131,61 @@ public class Items {
 
         public int getRequiredLevel() {
             return requiredLevel;
+        }
+
+        public static class Helmet extends Armor {
+            private final int health;
+            private final int defense;
+
+            public Helmet(String name, String description, int sellPrice, int buyPrice, boolean stackable, int defense, int durability, int level, int requiredLevel, int health, int requiredHealth) {
+                super(name, description, sellPrice, buyPrice, stackable, defense, durability, level, requiredLevel);
+                this.health = health;
+                this.defense = requiredHealth;
+            }
+
+            //getters
+            public int getHealth() {
+                return health;
+            }
+
+            public int getDefense() {
+                return defense;
+            }
+
+        }
+    }
+
+    public static class SkillBook extends Items {
+        private final Skill skill;
+
+        public SkillBook(String name, String description, int sellPrice, int buyPrice, boolean stackable, Skill skill) {
+            super(name, description, sellPrice, buyPrice, stackable);
+            this.skill = skill;
+        }
+
+        //getters
+        public Skill getSkill() {
+            return skill;
+        }
+    }
+
+    public static class Potion extends Items {
+        private final int health;
+        private final int mana;
+
+        public Potion(String name, String description, int sellPrice, int buyPrice, boolean stackable, int health, int mana) {
+            super(name, description, sellPrice, buyPrice, stackable);
+            this.health = health;
+            this.mana = mana;
+        }
+
+        //getters
+        public int getHealth() {
+            return health;
+        }
+
+        public int getMana() {
+            return mana;
         }
     }
 }
