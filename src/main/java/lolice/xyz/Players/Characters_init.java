@@ -2,6 +2,7 @@ package lolice.xyz.Players;
 
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Items.Inventory;
+import lolice.xyz.Items.Items;
 import lolice.xyz.NPC.NPC;
 import lolice.xyz.Skill;
 import lolice.xyz.Skill_stats;
@@ -28,7 +29,8 @@ public class Characters_init{
     private int x;
     private int y;
     private List<Location> locations;
-    private Inventory inventory;
+    private final Inventory inventory;
+    private Items activeItem;
 
     public Characters_init(String Cname, int Cmaxhealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills, int x, int y) {
         this.name = Cname;
@@ -385,12 +387,16 @@ public class Characters_init{
                 System.out.println("1. Yes");
                 System.out.println("2. No");
                 System.out.println("Enter your choice: ");
-                int Choice3 = UserChoice3.nextInt();
-                if (Choice3 == 1) {
-                    npc.questAccepted(this, quest);
-                } else if (Choice3 == 2) {
-                    System.out.println("Quest declined");
-                } else {
+                try {
+                    int Choice3 = UserChoice3.nextInt();
+                    if (Choice3 == 1) {
+                        npc.questAccepted(this, quest);
+                    } else if (Choice3 == 2) {
+                        System.out.println("Quest declined");
+                    } else {
+                        System.out.println("Invalid choice");
+                    }
+                } catch (InputMismatchException e) {
                     System.out.println("Invalid choice");
                 }
             }
@@ -441,17 +447,118 @@ public class Characters_init{
                 System.out.println("Invalid choice");
             }
         }
+
+
+
     public void choiceQuest(NPC npc) {
         System.out.println("Which quest do you want to choose?");
         int count = 0;
         for (Quest quest : npc.getQuest()) {
             count++;
-            System.out.println(count + quest.getName());
+            System.out.println(count + " " + quest.getName());
         }
         Scanner UserChoice = new Scanner(System.in);
         System.out.println("Enter your choice: ");
         int Choice = UserChoice.nextInt();
         this.acceptQuest(npc, Choice);
+    }
+
+
+    public void equipItem(Items item) {
+        if(item instanceof Items.Weapon) {
+            if(this.activeItem != null) {
+                System.out.println("You already have an active item equipped, do you want to replace it?");
+                Scanner UserChoice = new Scanner(System.in);
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                System.out.println("Enter your choice: ");
+                int choice = UserChoice.nextInt();
+                try {
+                    if (choice == 1) {
+                        this.inventory.addItem(this.activeItem);
+                        this.activeItem = item;
+                        System.out.println("You equipped: " + item.getName());
+                    } else if (choice == 2) {
+                        System.out.println("You didn't equip the item");
+                    } else {
+                        System.out.println("Invalid choice");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid choice");
+                }
+            } else {this.activeItem = item;}
+        }
+    }
+
+    public void unequipItem() {
+        if (this.activeItem != null) {
+            System.out.println("You unequipped: " + this.activeItem.getName());
+            this.inventory.addItem(this.activeItem);
+            this.activeItem = null;
+        } else{System.out.println("You dont have any equipped item");}
+    }
+
+
+    public void showInventoryTutorial() {
+        System.out.println("This is the inventory menu, here you can manage your items");
+        System.out.println("You can use items, drop items, equip items and unequip items");
+        System.out.println("To use an item, select 1, then type the name of the item and press enter. If the item is usable, it will be consumed or durability will decrease by 1.");
+        System.out.println("To drop an item, select 2, then type the name of the item and press enter. The item will be removed from your inventory and you will not be able to recover it.");
+        System.out.println("To equip an item, select 3, then type the name of the item and press enter. If the item is equippable, it will be equipped and replace the currently equipped item.\n" +
+                "The item you equip will disappear from your inventory. To add it again you will have to unequip it first.\n" +
+                "If you have an equipped item and you equip another one, the equipped item will be added to your inventory, replacing the new equipped item.");
+        System.out.println("To unequip an item, select 4. The item will be removed from your equipped items and added to your inventory.");
+
+    }
+
+
+    public void inventoryMenu() {
+        inventory.showInventory();
+        Scanner UserChoice = new Scanner(System.in);
+        System.out.println("This is the inventory menu, what do you want to do?");
+        System.out.println("1. Use item (WIP)");
+        System.out.println("2. Drop item (WIP)");
+        System.out.println("3. Equip item");
+        System.out.println("4. Unequip item");
+        System.out.println("5. Show tutorial");
+        System.out.println("0. Exit");
+        while(true) {
+            try {
+                System.out.println("What do you want to do ? ");
+                int choice = UserChoice.nextInt();
+                if (choice == 1) {
+                    //this.useItem();
+
+                } else if (choice == 2) {
+                    //this.dropItem();
+
+                } else if (choice == 3) {
+                    System.out.println("Which item do you want to equip?");
+                    String itemName = UserChoice.next();
+                    Items item = this.inventory.getItemByName(itemName);
+                    if (item == null) {
+                        System.out.println("Item not found");
+                    } else {
+                        this.equipItem(item);
+                    }
+
+                } else if (choice == 4) {
+                    this.unequipItem();
+
+                } else if (choice == 5) {
+                    this.showInventoryTutorial();
+
+                } else if (choice == 0) {
+                    System.out.println("You left the inventory menu");
+                    break;
+                } else {
+                    System.out.println("Invalid choice");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid choice");
+            }
+
+        }
     }
 }
 
