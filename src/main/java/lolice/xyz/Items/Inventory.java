@@ -50,6 +50,14 @@ public class Inventory {
         }
     }
 
+    public Items getItemByName(String itemName){
+        for(int i=0; i<count; i++) {
+            if(items[i].getName().equals(itemName)) {
+                return items[i];
+            } else{return null;}
+        }return null;
+    }
+
     public static class Shop extends Inventory {
         private final Items[] items;
         private final int size;
