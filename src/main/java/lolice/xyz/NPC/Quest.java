@@ -3,6 +3,7 @@ package lolice.xyz.NPC;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Players.Leveling;
+import lolice.xyz.Items.Items;
 
 public class Quest {
     private final String name;
@@ -14,8 +15,14 @@ public class Quest {
     private boolean completed;
     private int condition;
     private final int conditionGoal;
+    private Items itemReward;
 
     public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal) {
+        this(name, mission, exp, gold, dialog, conditionGoal, null);
+    }
+
+
+    public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal, Items itemReward) {
         this.name = name;
         this.expReward = exp;
         this.goldReward = gold;
@@ -23,6 +30,7 @@ public class Quest {
         this.condition = 0;
         this.mission = mission;
         this.conditionGoal = conditionGoal;
+        this.itemReward = itemReward;
     }
 
     //getters
@@ -58,6 +66,10 @@ public class Quest {
         return conditionGoal;
     }
 
+    public Items getItemReward() {
+        return itemReward;
+    }
+
     //setters
     public void setExp(int exp) {
         this.expReward = exp;
@@ -72,6 +84,9 @@ public class Quest {
         System.out.println("Dialog: " + mission);
         System.out.println("Exp: " + expReward);
         System.out.println("Gold: " + goldReward);
+        if(itemReward != null) {
+            System.out.println("Reward: " + itemReward.getName());
+        }
     }
 
     public void showQuestDialog() {
@@ -93,6 +108,8 @@ public class Quest {
         if (this.completed) {
             System.out.println("Quest completed!");
             Leveling.gainExp(this.expReward, player);
+            giveGoldReward(player);
+            giveItemReward(player);
         } else {
             System.out.println("Quest not completed yet.");
         }
@@ -101,6 +118,18 @@ public class Quest {
     public void defeatEnemyCondition(Enemy_init enemy, Characters_init player) {
         if(!this.isCompleted() && this.mission.contains("Defeat "+enemy.getName())) {
             this.updateProgress(player);
+        }
+    }
+
+    public void giveItemReward(Characters_init player) {
+        if (this.completed && this.itemReward != null) {
+            player.getInventory().addItem(this.itemReward);
+        }
+    }
+
+    public void giveGoldReward(Characters_init player) {
+        if (this.completed) {
+            player.setGold(player.getGold() + this.goldReward);
         }
     }
 }
