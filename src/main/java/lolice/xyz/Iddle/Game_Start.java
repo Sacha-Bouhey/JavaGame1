@@ -1,5 +1,6 @@
 package lolice.xyz.Iddle;
 
+import lolice.xyz.Items.Items;
 import lolice.xyz.Location;
 import lolice.xyz.Players.Characters;
 import lolice.xyz.Players.Characters_init;
@@ -10,10 +11,7 @@ import lolice.xyz.NPC.NPC;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Skill;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Game_Start {
@@ -44,7 +42,7 @@ public class Game_Start {
     }
 
     public static void initNPC() {
-        Quest_init.put("Tutorial 1",new Quest("Tutorial 1: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest.", 2));
+        Quest_init.put("Tutorial 1",new Quest("Tutorial 1: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest.", 2, new Items.Weapon.mageWeapon("Woden staff", "A basic staff for beginners", 10, 25, false, 2, 100, 1, 1, 10, 100)));
 
         NPC_init.put("Tutorial villager", new NPC("Tutorial villager", 100, 10, 1,1000, """
                 Hello adventurer! \
@@ -79,6 +77,26 @@ public class Game_Start {
             ((Location.Village) Location_init.getFirst()).addNPC(NPC_init.get("Tutorial villager"));
         }
         Menu menu = new Menu(player);
+        System.out.println("Do you want to read the tutorial? (y/n)");
+        Scanner scanner = new Scanner(System.in);
+        String tutorial = scanner.nextLine();
+        if (tutorial.equals("y")) {
+            System.out.println("Tutorial:");
+            System.out.println("You can explore the world by moving to different locations.");
+            System.out.println("You can unlock new locations by completing the storyline quests.");
+            System.out.println("You can talk to an NPC by selecting the appropriate option.");
+            System.out.println("When you talk to an NPC, you can accept quests or enter the shop to buy items or sell items.");
+            System.out.println("Quests are important as they give gold, exp point and sometimes Items to help you during your journey.");
+            System.out.println("You can only fight in non-village locations, so make sure you are prepared before exploring.");
+            System.out.println("Managing inventory is very important, if you finish a quest without enough space in your inventory, you will lose the reward.");
+            System.out.println("You can sell items you dont need for extra gold, this will also help you to manage your inventory.");
+            System.out.println("You have multiple way to gain gold, you can sell items, complete quests or defeat enemies (Not all enemy drop gold).");
+            System.out.println("You can also use skills to help you defeat enemies. There are multiple ways to gain skills");
+            System.out.println("First is the most obvious, you can gain skills by leveling up.");
+            System.out.println("Second is by buying them in a shop.");
+            System.out.println("Third is by completing quests (You may find secret quests to access a new secret class).");
+            System.out.println("Fourth is by upgrading your weapon stats, if you upgrade one enough it will give you access to exclusive skill for your class.");
+        }
         menu.showStartMenu();
     }
 }
