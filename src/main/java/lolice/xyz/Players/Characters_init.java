@@ -331,17 +331,6 @@ public class Characters_init{
         activeQuests.add(quest);
     }
 
-    //Print current active guests
-    public void showActiveQuests() {
-        for (Quest quests : activeQuests) {
-            if (!quests.isCompleted()) {
-                System.out.println(quests.getName());
-                System.out.println(quests.getMission());
-                System.out.println("Progress: " + quests.getCondition() + "/" + quests.getConditionGoal() + "\n");
-            }
-        }
-    }
-
     //Update all quests
     public void updateAllQuests(Enemy_init enemy) {
         if (activeQuests.isEmpty()) {
@@ -465,15 +454,15 @@ public class Characters_init{
 
 
     public void equipItem(Items item) {
-        if(item instanceof Items.Weapon) {
+        if(item instanceof Items.Weapon.mageWeapon) {
             if(this.activeItem != null) {
                 System.out.println("You already have an active item equipped, do you want to replace it?");
                 Scanner UserChoice = new Scanner(System.in);
                 System.out.println("1. Yes");
                 System.out.println("2. No");
                 System.out.println("Enter your choice: ");
-                int choice = UserChoice.nextInt();
                 try {
+                    int choice = UserChoice.nextInt();
                     if (choice == 1) {
                         this.inventory.addItem(this.activeItem);
                         this.activeItem = item;
@@ -484,9 +473,9 @@ public class Characters_init{
                         System.out.println("Invalid choice");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println("Invalid choice");
+                    System.out.println("Invalid choice 2");
                 }
-            } else {this.activeItem = item;}
+            } else {this.activeItem = item; System.out.println("You equipped: " + item.getName()); this.inventory.removeItem(item);}
         }
     }
 
@@ -534,13 +523,15 @@ public class Characters_init{
 
                 } else if (choice == 3) {
                     System.out.println("Which item do you want to equip?");
-                    String itemName = UserChoice.next();
-                    Items item = this.inventory.getItemByName(itemName);
-                    if (item == null) {
-                        System.out.println("Item not found");
-                    } else {
-                        this.equipItem(item);
+                    for (int i = 0; i < this.inventory.getItems().length; i++) {
+                        if (this.inventory.getItems()[i] != null) {
+                            System.out.println(i + ". " + this.inventory.getItems()[i].getName());
+                        }
                     }
+                    int userChoice = UserChoice.nextInt();
+                    Items item = this.inventory.getItems()[userChoice];
+                    this.equipItem(item);
+                    break;
 
                 } else if (choice == 4) {
                     this.unequipItem();
@@ -558,6 +549,26 @@ public class Characters_init{
                 System.out.println("Invalid choice");
             }
 
+        }
+    }
+
+    public void showQuestMenu() {
+        int count = 0;
+        for (Quest quest : activeQuests) {
+            if (quest.isCompleted()) {
+                if(count == 0) {
+                    System.out.println("Completed quests");
+                    count++;
+                }
+                System.out.println(quest.getName() + " Return quest to: " + quest.getOrigin());
+            }
+        }
+        for (Quest quests : activeQuests) {
+            if (!quests.isCompleted()) {
+                System.out.println(quests.getName());
+                System.out.println(quests.getMission());
+                System.out.println("Progress: " + quests.getCondition() + "/" + quests.getConditionGoal() + "\n");
+            }
         }
     }
 }

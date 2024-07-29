@@ -43,7 +43,6 @@ public class Leveling {
 
     public static void gainExp(int exp, Characters_init player) {
         player.getLeveling().setExp(player.getLeveling().getExp()+exp);
-        System.out.println(player.getLeveling().getExp());
         if (player.getLeveling().getExp() >= player.getLeveling().getExptolevel()) {
             LevelUp(player);
         }

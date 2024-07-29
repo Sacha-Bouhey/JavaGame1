@@ -70,9 +70,7 @@ public class Location {
 
     public void showLocationInfo() {
         System.out.println("Name: " + name);
-        System.out.println("Description: " + description);
-        System.out.println("Unlocked: " + unlocked + "\n");
-    }
+        System.out.println("Description: " + description + "\n");}
 
     public class Dungeon extends Location {
         private List<Enemy_init> enemies;

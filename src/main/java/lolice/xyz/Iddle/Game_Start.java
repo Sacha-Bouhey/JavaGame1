@@ -42,7 +42,7 @@ public class Game_Start {
     }
 
     public static void initNPC() {
-        Quest_init.put("Tutorial 1",new Quest("Tutorial 1: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest.", 2, new Items.Weapon.mageWeapon("Woden staff", "A basic staff for beginners", 10, 25, false, 2, 100, 1, 1, 10, 100)));
+        Quest_init.put("Tutorial 1",new Quest("Tutorial 1: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest.", 2, new Items.Weapon.mageWeapon("Wooden staff", "A basic staff for beginners", 10, 25, false, 2, 100, 1, 1, 10, 100)));
 
         NPC_init.put("Tutorial villager", new NPC("Tutorial villager", 100, 10, 1,1000, """
                 Hello adventurer! \
@@ -81,6 +81,7 @@ public class Game_Start {
         Scanner scanner = new Scanner(System.in);
         String tutorial = scanner.nextLine();
         if (tutorial.equals("y")) {
+            //TODO: Add func to show each line when enter is pressed
             System.out.println("Tutorial:");
             System.out.println("You can explore the world by moving to different locations.");
             System.out.println("You can unlock new locations by completing the storyline quests.");

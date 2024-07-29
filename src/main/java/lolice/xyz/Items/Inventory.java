@@ -24,6 +24,11 @@ public class Inventory {
         }
     }
 
+
+    public Items[] getItems() {
+        return items;
+    }
+
     public void removeItem(Items item) {
         // Remove the item from the inventory
         for (int i = 0; i < count; i++) {
@@ -51,10 +56,10 @@ public class Inventory {
     }
 
     public Items getItemByName(String itemName){
-        for(int i=0; i<count; i++) {
-            if(items[i].getName().equals(itemName)) {
+        for(int i = 0; i < count; i++) {
+            if(itemName.equals(items[i].getName())) {
                 return items[i];
-            } else{return null;}
+            }
         }return null;
     }
 

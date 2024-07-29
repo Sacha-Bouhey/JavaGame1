@@ -70,8 +70,7 @@ public class NPC {
     public void showNPCInfo() {
         System.out.println("Name: " + name);
         System.out.println("HP: " + hp);
-        System.out.println("Damage: " + damage);
-        System.out.println("Gold: " + gold + "\n");
+        System.out.println("Damage: " + damage + "\n");
     }
 
     public void showNPCQuestName() {
@@ -92,6 +91,7 @@ public class NPC {
 
     public void questAccepted(Characters_init player, Quest quest) {
         System.out.println("Quest accepted: " + quest.getName());
+        quest.setOrigin(this.getName());
         player.addActiveQuest(quest);
         questUnlockable(quest,player);
     }

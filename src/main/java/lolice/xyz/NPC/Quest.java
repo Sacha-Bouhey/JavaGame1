@@ -9,13 +9,13 @@ public class Quest {
     private final String name;
     private int expReward;
     private int goldReward;
-    //todo: add reward system.
     private final String dialog;
     private final String mission;
     private boolean completed;
     private int condition;
     private final int conditionGoal;
     private Items itemReward;
+    private String origin;
 
     public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal) {
         this(name, mission, exp, gold, dialog, conditionGoal, null);
@@ -70,6 +70,9 @@ public class Quest {
         return itemReward;
     }
 
+    public String getOrigin() {
+        return origin;
+    }
     //setters
     public void setExp(int exp) {
         this.expReward = exp;
@@ -77,6 +80,10 @@ public class Quest {
 
     public void setGold(int gold) {
         this.goldReward = gold;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
     public void showQuestInfo() {

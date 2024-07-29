@@ -82,13 +82,14 @@ public class Menu {
             }
             else if (Choice == 5) {
                 System.out.println("Showing active quests...");
-                player.showActiveQuests();
+                player.showQuestMenu();
             }
             else if (Choice == 6) {
                 playerSkillStatsUpgrade();
             }
             else if (Choice == 7) {
-                System.out.println("If you are une the wilderness, you will encounter enemies. Are you sure you want to explore? (y/n)");
+                //TODO: move somewhere else
+                System.out.println("If you are in the wilderness, you will encounter enemies. Are you sure you want to explore? (y/n)");
                 Scanner UserChoice2 = new Scanner(System.in);
                 String Choice2 = UserChoice2.nextLine();
                 if(Choice2.equals("y")) {
