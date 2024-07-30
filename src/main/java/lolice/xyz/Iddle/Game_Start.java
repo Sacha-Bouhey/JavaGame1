@@ -9,7 +9,7 @@ import lolice.xyz.Players.Player_init;
 import lolice.xyz.NPC.Quest;
 import lolice.xyz.NPC.NPC;
 import lolice.xyz.Enemies.Enemy_init;
-import lolice.xyz.Skill;
+import lolice.xyz.Skill.Skill;
 
 import java.util.*;
 
@@ -28,9 +28,9 @@ public class Game_Start {
 
     public static void initEnemies() {
         List<Skill> goblinSkills = new ArrayList<>();
-        goblinSkills.add(new Skill("Goblin claw", "Weak attack, but dangerous for a beginner", 10, 0, true));
+        goblinSkills.add(new Skill("Goblin claw", "Weak attack, but dangerous for a beginner", 10, 0, true, null));
         List <Enemy_init> enemies = new ArrayList<>();
-        enemies.add(new Enemy_init("Goblin", 100, 10, 1, 100, goblinSkills));
+        enemies.add(new Enemy_init("Goblin", 100, 10, 100, 1, goblinSkills));
         Enemies_init.put("Forest", enemies);
     }
 
@@ -44,6 +44,8 @@ public class Game_Start {
     public static void initNPC() {
         Quest_init.put("Tutorial 1",new Quest("Tutorial 1: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest.", 2, new Items.Weapon.mageWeapon("Wooden staff", "A basic staff for beginners", 10, 25, false, 2, 100, 1, 1, 10, 100)));
 
+        Quest_init.get("Tutorial 1").setNextQuest(new Quest("Tutorial 2: Buy something in the shop","Buy in shop", 100, 100, "Buy any item in the shop to complete this quest", 1));
+
         NPC_init.put("Tutorial villager", new NPC("Tutorial villager", 100, 10, 1,1000, """
                 Hello adventurer! \
                 I have a quest for you. You must defeat 2 goblins to complete this quest.\s
@@ -52,6 +54,8 @@ public class Game_Start {
                 """));
 
         NPC_init.get("Tutorial villager").addQuest(Quest_init.get("Tutorial 1"));
+
+        NPC_init.get("Tutorial villager").getShop().addItem(new Items.Potion("Small healing potion", "Heals you for 20 HP", 0, 0, false, 20, 0));
     }
 
     public static void lore() {
@@ -84,19 +88,34 @@ public class Game_Start {
             //TODO: Add func to show each line when enter is pressed
             System.out.println("Tutorial:");
             System.out.println("You can explore the world by moving to different locations.");
+            scanner.nextLine();
             System.out.println("You can unlock new locations by completing the storyline quests.");
+            scanner.nextLine();
             System.out.println("You can talk to an NPC by selecting the appropriate option.");
+            scanner.nextLine();
             System.out.println("When you talk to an NPC, you can accept quests or enter the shop to buy items or sell items.");
+            scanner.nextLine();
             System.out.println("Quests are important as they give gold, exp point and sometimes Items to help you during your journey.");
+            scanner.nextLine();
             System.out.println("You can only fight in non-village locations, so make sure you are prepared before exploring.");
+            scanner.nextLine();
             System.out.println("Managing inventory is very important, if you finish a quest without enough space in your inventory, you will lose the reward.");
+            scanner.nextLine();
             System.out.println("You can sell items you dont need for extra gold, this will also help you to manage your inventory.");
+            scanner.nextLine();
             System.out.println("You have multiple way to gain gold, you can sell items, complete quests or defeat enemies (Not all enemy drop gold).");
+            scanner.nextLine();
             System.out.println("You can also use skills to help you defeat enemies. There are multiple ways to gain skills");
+            scanner.nextLine();
             System.out.println("First is the most obvious, you can gain skills by leveling up.");
+            scanner.nextLine();
             System.out.println("Second is by buying them in a shop.");
+            scanner.nextLine();
             System.out.println("Third is by completing quests (You may find secret quests to access a new secret class).");
+            scanner.nextLine();
             System.out.println("Fourth is by upgrading your weapon stats, if you upgrade one enough it will give you access to exclusive skill for your class.");
+            scanner.nextLine();
+            System.out.println("Good luck on your journey! (Press enter to continue)");
         }
         menu.showStartMenu();
     }
