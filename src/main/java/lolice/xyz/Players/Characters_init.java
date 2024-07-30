@@ -4,7 +4,8 @@ import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Items.Inventory;
 import lolice.xyz.Items.Items;
 import lolice.xyz.NPC.NPC;
-import lolice.xyz.Skill;
+import lolice.xyz.Skill.Effect;
+import lolice.xyz.Skill.Skill;
 import lolice.xyz.Skill_stats;
 import lolice.xyz.Location;
 import lolice.xyz.NPC.Quest;
@@ -16,7 +17,9 @@ public class Characters_init{
     private String name;
     private int maxhealth;
     private int health;
+    private int maxstrength;
     private int strength;
+    private int maxmana;
     private int mana;
     private int agility;
     private int defence;
@@ -31,13 +34,16 @@ public class Characters_init{
     private List<Location> locations;
     private final Inventory inventory;
     private Items activeItem;
+    private boolean isStunned;
 
-    public Characters_init(String Cname, int Cmaxhealth, int Cstrength, int Cmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills, int x, int y) {
+    public Characters_init(String Cname, int Cmaxhealth, int Cmaxstrength, int Cmaxmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills, int x, int y) {
         this.name = Cname;
         this.maxhealth = Cmaxhealth;
         this.health = Cmaxhealth;
-        this.strength = Cstrength;
-        this.mana = Cmana;
+        this.maxstrength = Cmaxstrength;
+        this.strength = Cmaxstrength;
+        this.maxmana = Cmaxmana;
+        this.mana = Cmaxmana;
         this.agility = Cagility;
         this.defence = Cdefence;
         this.statpoint = Cstatpoint;
@@ -53,6 +59,7 @@ public class Characters_init{
         this.activeQuests = new ArrayList<>();
         this.locations = new ArrayList<>();
         this.inventory = new Inventory(10);
+        this.isStunned = false;
     }
 
     //Getters
@@ -68,8 +75,16 @@ public class Characters_init{
         return health;
     }
 
+    public int getMaxStrength() {
+        return maxstrength;
+    }
+
     public int getStrength() {
         return strength;
+    }
+
+    public int getMaxMana() {
+        return maxmana;
     }
 
     public int getMana() {
@@ -116,6 +131,16 @@ public class Characters_init{
         return inventory;
     }
 
+    public List<Quest> getFinishedQuest() {
+        List<Quest> finishedQuests = new ArrayList<>();
+        for(Quest quest : activeQuests) {
+            if(quest.isCompleted()) {
+                finishedQuests.add(quest);
+            }
+        }
+        return finishedQuests;
+    }
+
     // Setters
 
     public void setLocations(List<Location> locations) {
@@ -129,8 +154,16 @@ public class Characters_init{
         this.health = newHealth;
     }
 
+    public void setMaxStrength(int newMaxStrength) {
+        this.maxstrength = newMaxStrength;
+    }
+
     public void setStrength(int newStrength) {
         this.strength = newStrength;
+    }
+    
+    public void setMaxMana(int newMaxMana) {
+        this.maxmana = newMaxMana;
     }
 
     public void setMana(int newMana) {
@@ -165,6 +198,10 @@ public class Characters_init{
         this.activeQuests = activeQuests;
     }
 
+    public void setStunned(Boolean isstunned) {
+        this.isStunned = isstunned;
+    }
+
     //Show info
     public void showInfo() {
         System.out.println("Name: " + name + "\n");
@@ -184,7 +221,7 @@ public class Characters_init{
     }
 
     //Use skill
-    public int useSkill(Skill player_skill) {
+    public int useSkill(Skill player_skill, Enemy_init enemy) {
         //Use skill
         int damage = player_skill.getDamage();
         //If skill doesn't cost mana, add strength to damage
@@ -414,21 +451,52 @@ public class Characters_init{
 
 
         public void npcDialog(NPC npc){
+            boolean hasFinishedQuest = false;
             System.out.println(npc.getDialog());
             Scanner UserChoice3 = new Scanner(System.in);
             System.out.println("What do you want to do?");
             System.out.println("1. Show quests");
             System.out.println("2. Enter shop");
+
+
+
+            if(!getFinishedQuest().isEmpty()) {
+
+                for(Quest quest : getFinishedQuest()) {
+                    if (quest.getOrigin().equals(npc.getName())) {
+                        hasFinishedQuest = true;
+                        break;
+                    }
+                }
+                if(hasFinishedQuest) {
+                    System.out.println("3. Return quest");
+                }
+            }
+
+
             System.out.println("0. Exit");
 
             int choice = UserChoice3.nextInt();
 
             if(choice == 1) {
-                this.choiceQuest(npc);
+                if(!npc.getQuest().isEmpty()){
+                    this.choiceQuest(npc);
+                } else{System.out.println("No quests currently available \n");}
             }
             else if(choice == 2) {
                 this.npcShop(npc);
             }
+            if(hasFinishedQuest) {
+                if(choice == 3) {
+                    for(Quest quest : getFinishedQuest()) {
+                        if (quest.getOrigin().equals(npc.getName())) {
+                            System.out.println("You returned the quest: " + quest.getName());
+                            quest.checkQuestCompletion(this);
+                        }
+                    }
+                }
+            }
+
             else if(choice == 0) {
                 System.out.println("You left the NPC");
             }
@@ -498,6 +566,30 @@ public class Characters_init{
                 "If you have an equipped item and you equip another one, the equipped item will be added to your inventory, replacing the new equipped item.");
         System.out.println("To unequip an item, select 4. The item will be removed from your equipped items and added to your inventory.");
 
+    }
+
+    public void useItem() {
+        System.out.println("Witch item do you want to use ?");
+        for(Items items : this.inventory.getItems()) {
+            if(items != null) {
+                System.out.println(items.getName());
+            }
+        }
+        Scanner UserChoice = new Scanner(System.in);
+        int choice = UserChoice.nextInt();
+        Items item = this.inventory.getItems()[choice];
+        if(item instanceof Items.Potion) {
+            Items.Potion potion = (Items.Potion) item;
+            this.health += potion.getHealth();
+            if(this.health > this.maxhealth) {
+                this.health = this.maxhealth;
+            }
+            this.mana += potion.getMana();
+            if(this.mana > this.maxmana) {
+                this.mana = this.maxmana;
+            }
+            this.inventory.removeItem(item);
+        }
     }
 
 
@@ -570,6 +662,10 @@ public class Characters_init{
                 System.out.println("Progress: " + quests.getCondition() + "/" + quests.getConditionGoal() + "\n");
             }
         }
+    }
+
+    public void stunEnemy(Enemy_init enemy) {
+        enemy.setStunned(true);
     }
 }
 
