@@ -90,25 +90,30 @@ public class Menu {
             else if (Choice == 7) {
                 //TODO: move somewhere else
                 System.out.println("If you are in the wilderness, you will encounter enemies. Are you sure you want to explore? (y/n)");
-                Scanner UserChoice2 = new Scanner(System.in);
-                String Choice2 = UserChoice2.nextLine();
-                if(Choice2.equals("y")) {
-                    System.out.println("Exploring current location...");
-                    player.getCurrentLocation().showLocationInfo();
-                    if(player.getCurrentLocation() instanceof Location.Village) {
-                        continue;
+                while(true) {
+                    try {
+                        Scanner UserChoice2 = new Scanner(System.in);
+                        String Choice2 = UserChoice2.nextLine();
+                        if (Choice2.equals("y")) {
+                            System.out.println("Exploring current location...");
+                            player.getCurrentLocation().showLocationInfo();
+                            if (player.getCurrentLocation() instanceof Location.Village) {
+                                break;
+                            } else if (player.getCurrentLocation() instanceof Location.Wilderness) {
+                                Battle battle = new Battle(player, ((Location.Wilderness) player.getCurrentLocation()).selectRandomEnemy());
+                                battle.Start();
+                                break;
+                            } else if (player.getCurrentLocation() instanceof Location.Dungeon) {
+                                break;
+                            }
+                        } else {
+                            System.out.println("Returning to main menu...");
+                            startMenu(player);
+                            return;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Invalid choice");
                     }
-                    else if(player.getCurrentLocation() instanceof Location.Wilderness) {
-                        Battle battle = new Battle(player, ((Location.Wilderness) player.getCurrentLocation()).selectRandomEnemy());
-                        battle.Start();
-                    }
-                    else if(player.getCurrentLocation() instanceof Location.Dungeon) {
-                        continue;
-                    }
-                }
-                else {
-                    System.out.println("Returning to main menu...");
-                    startMenu(player);
                 }
             }
             else if (Choice == 8) {
