@@ -1,7 +1,7 @@
 
 package lolice.xyz.Enemies;
 
-import lolice.xyz.Skill;
+import lolice.xyz.Skill.Skill;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ public class Enemy_init {
     private int mana;
     private int defence;
     private List<Skill> skills;
+    private boolean isStunned;
 
     public Enemy_init(String Ename, int Ehealth, int Estrength, int Emana, int Edefence, List<Skill> Eskills) {
         this.name = Ename;
@@ -20,6 +21,7 @@ public class Enemy_init {
         this.mana = Emana;
         this.defence = Edefence;
         this.skills = Eskills;
+        this.isStunned = false;
     }
 
     public Enemy_init(Enemy_init enemy) {
@@ -50,6 +52,9 @@ public class Enemy_init {
     public List<Skill> getSkills() {
         return skills;
     }
+    public boolean isStunned() {
+        return isStunned;
+    }
 
     //Setters
     public void setHealth(int newhealth) {
@@ -65,7 +70,10 @@ public class Enemy_init {
         this.defence = newdefence;
     }
     public void takeDamage(int damage) {
-        this.health -= damage - defence;
+        this.health -= Math.max(damage - defence, 0);
+    }
+    public void setStunned(Boolean isstunned) {
+        this.isStunned = isstunned;
     }
     //showInfo
     public void showInfo() {
