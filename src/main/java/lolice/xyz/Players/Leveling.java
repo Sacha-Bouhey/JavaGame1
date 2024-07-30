@@ -59,8 +59,8 @@ public class Leveling {
 
         player.setMaxHealth(player.getHealth() + 10);
         player.setHealth(player.getMaxhealth());
-        player.setStrength(player.getStrength() + 5);
-        player.setMana(player.getMana() + 10);
+        player.setMaxStrength(player.getMaxStrength() + 5);
+        player.setMaxMana(player.getMaxMana() + 10);
         player.setAgility(player.getAgility() + 5);
         player.setDefence(player.getDefence() + 5);
     }
