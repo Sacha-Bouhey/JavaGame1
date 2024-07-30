@@ -16,6 +16,7 @@ public class Quest {
     private final int conditionGoal;
     private Items itemReward;
     private String origin;
+    private Quest nextQuest;
 
     public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal) {
         this(name, mission, exp, gold, dialog, conditionGoal, null);
@@ -31,6 +32,7 @@ public class Quest {
         this.mission = mission;
         this.conditionGoal = conditionGoal;
         this.itemReward = itemReward;
+        this.nextQuest = null;
     }
 
     //getters
@@ -73,6 +75,10 @@ public class Quest {
     public String getOrigin() {
         return origin;
     }
+
+    public Quest getNextQuest() {
+        return nextQuest;
+    }
     //setters
     public void setExp(int exp) {
         this.expReward = exp;
@@ -84,6 +90,10 @@ public class Quest {
 
     public void setOrigin(String origin) {
         this.origin = origin;
+    }
+
+    public void setNextQuest(Quest nextQuest) {
+        this.nextQuest = nextQuest;
     }
 
     public void showQuestInfo() {
@@ -117,6 +127,9 @@ public class Quest {
             Leveling.gainExp(this.expReward, player);
             giveGoldReward(player);
             giveItemReward(player);
+            if (this.nextQuest != null) {
+                player.addActiveQuest(this.nextQuest);
+            }
         } else {
             System.out.println("Quest not completed yet.");
         }
@@ -127,6 +140,8 @@ public class Quest {
             this.updateProgress(player);
         }
     }
+
+    //TODO: Buy item condition
 
     public void giveItemReward(Characters_init player) {
         if (this.completed && this.itemReward != null) {
