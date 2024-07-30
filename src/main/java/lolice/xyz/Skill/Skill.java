@@ -1,18 +1,26 @@
-package lolice.xyz;
+package lolice.xyz.Skill;
+
+import lolice.xyz.Enemies.Enemy_init;
+import lolice.xyz.Players.Characters_init;
+
+import java.util.List;
 
 public class Skill {
-    public String SkillName;
-    public String Description;
-    public int Damage;
-    public boolean IsActive;
-    public int ManaCost;
+    private final String SkillName;
+    private final String Description;
+    private final int Damage;
+    private boolean IsActive;
+    private final int ManaCost;
+    private final List<Effect> Effect;
 
-    public Skill(String SkillName, String Description, int Damage, int ManaCost, boolean IsActive) {
+
+    public Skill(String SkillName, String Description, int Damage, int ManaCost, boolean IsActive, List<Effect> Effect) {
         this.SkillName = SkillName;
         this.Description = Description;
         this.Damage = Damage;
         this.ManaCost = ManaCost;
         this.IsActive = IsActive;
+        this.Effect = Effect;
     }
 
     //Getters
@@ -36,6 +44,10 @@ public class Skill {
         return IsActive;
     }
 
+    public List<Effect> getEffect() {
+        return Effect;
+    }
+
     //Setters
     public void setActive() {
         this.IsActive = true;
@@ -56,5 +68,12 @@ public class Skill {
 
     public String getName() {
         return SkillName;
+    }
+
+    public void applyEffects(Characters_init player, Enemy_init enemy) {
+        for (Effect effect : Effect) {
+            Effect newEffect = new Effect(effect.getEffectName(), effect.getDescription(), effect.getDamage(), effect.getDuration(), effect.getType());
+            newEffect.applyEffect(player, enemy);
+        }
     }
 }
