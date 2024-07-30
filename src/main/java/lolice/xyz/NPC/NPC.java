@@ -89,14 +89,19 @@ public class NPC {
         this.quests.add(quest);
     }
 
+    public void removeQuest(Quest quest) {
+        this.quests.remove(quest);
+    }
+
     public void questAccepted(Characters_init player, Quest quest) {
         System.out.println("Quest accepted: " + quest.getName());
         quest.setOrigin(this.getName());
         player.addActiveQuest(quest);
-        questUnlockable(quest,player);
+        questAcceptUnlockable(quest,player);
+        removeQuest(quest);
     }
 
-    public void questUnlockable(Quest quest,Characters_init player) {
+    public void questAcceptUnlockable(Quest quest,Characters_init player) {
         if (quest.getName().equals("Tutorial 1: Defeat Goblin")) {
             System.out.println("You just unlocked the forest location! \n You can go there with the explore option to find and defeat goblins." +
                     " \n You might find something usefull there! Good luck! \n");
