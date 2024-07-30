@@ -1,6 +1,6 @@
 package lolice.xyz.Items;
 
-import lolice.xyz.Skill;
+import lolice.xyz.Skill.Skill;
 
 public class Items {
     private final String name;
