@@ -1,6 +1,7 @@
 package lolice.xyz;
 
 import lolice.xyz.Players.Characters_init;
+import lolice.xyz.Skill.Skill;
 
 public class Skill_stats {
     private String skill_name;
