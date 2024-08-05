@@ -1,6 +1,7 @@
 package lolice.xyz;
 
 import lolice.xyz.Enemies.Enemy_init;
+import lolice.xyz.Iddle.Menu;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Players.Leveling;
 import lolice.xyz.Players.Player_choice;
@@ -32,20 +33,18 @@ public class Battle {
     public void Start() {
         System.out.println("Battle started !");
         System.out.println("You have encountered " + enemies.getName());
-        //while the battle isn't over
+        // while the battle isn't over
         while (!isBattleOver()) {
             playerTurn();
             if (isBattleOver()) {
-                //TODO: When all status effect are implemented, remove them here
-                for(Effect effect : activeEffects) {
-                    effect.removeEffect(player, enemies);
-                }
-                System.out.println("You have gained "+" experience points");
-                Leveling.gainExp(10, player);
-                player.updateAllQuests(enemies);
+                endBattle();
                 break;
             }
             enemiesTurn();
+            if (isBattleOver()) {
+                endBattle();
+                break;
+            }
             handleEffectDuration();
         }
     }
@@ -68,7 +67,7 @@ public class Battle {
                 Choice = UserChoice.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a number.");
-                UserChoice.next();
+                UserChoice.nextInt();
                 continue;
             }
 
@@ -168,5 +167,15 @@ public class Battle {
 
     private boolean isBattleOver() {
         return player.getHealth() <= 0 || enemies.getHealth() <= 0;
+    }
+
+    private void endBattle() {
+        // TODO: When all status effects are implemented, remove them here
+        for(Effect effect : activeEffects) {
+            effect.removeEffect(player, enemies);
+        }
+        System.out.println("You have gained " + " experience points");
+        Leveling.gainExp(10, player);
+        player.updateAllQuests(enemies, null, null);
     }
 }
