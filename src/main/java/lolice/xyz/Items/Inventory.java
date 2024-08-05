@@ -2,107 +2,103 @@ package lolice.xyz.Items;
 
 import lolice.xyz.Players.Characters_init;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Inventory {
-    private final Items[] items;
+    private List<Items> items;
     private final int size;
-    private int count;
 
     public Inventory(int size) {
         this.size = size;
-        this.items = new Items[size];
-        this.count = 0;
+        this.items = new ArrayList<>(size);
     }
 
     public void addItem(Items item) {
-        if (count < size) {
-            items[count] = item;
-            count++;
+        if (items.size() < size) {
+            items.add(item);
         } else {
             System.out.println("Inventory is full!");
         }
     }
 
-
-    public Items[] getItems() {
+    public List<Items> getItems() {
         return items;
     }
 
     public void removeItem(Items item) {
-        // Remove the item from the inventory
-        for (int i = 0; i < count; i++) {
-            if (items[i].equals(item)) {
-                items[i] = null;
-                count--;
-                //Adjust the array so there are no null values
-                for (int j = i; j < count; j++) {
-                    items[j] = items[j + 1];
-                }
-                items[count] = null;
-                break;
-            }
-        }
+        items.remove(item);
     }
 
     public void showInventory() {
-        if (count == 0) {
+        if (this.items.isEmpty()) {
             System.out.println("Inventory is empty!");
         } else {
-            for (int i = 0; i < count; i++) {
-                System.out.println(items[i].getName());
+            for (Items item : items) {
+                System.out.println(item.getName());
             }
         }
     }
 
-    public Items getItemByName(String itemName){
-        for(int i = 0; i < count; i++) {
-            if(itemName.equals(items[i].getName())) {
-                return items[i];
+    public Items getItemByName(String itemName) {
+        for (Items item : items) {
+            if (itemName.equals(item.getName())) {
+                return item;
             }
-        }return null;
+        }
+        return null;
     }
 
     public static class Shop extends Inventory {
-        private final Items[] items;
         private final int size;
-        private int count;
 
         public Shop(int size) {
             super(size);
             this.size = size;
-            this.items = new Items[size];
-            this.count = 0;
+        }
+
+        public Inventory.Shop getShop() {
+            return this;
         }
 
         public void showShop() {
-            if (count == 0) {
+            if (getItems().isEmpty()) {
                 System.out.println("Shop is empty!");
             } else {
-                for (int i = 0; i < count; i++) {
-                    System.out.println(items[i].getName());
+                System.out.println("\n Shop items:");
+                int count = 0;
+                for (Items item : getItems()) {
+                    System.out.println(count + ": " + item.getName());
+                    count++;
                 }
+                System.out.println("\n");
             }
         }
 
         public Boolean isEmpty() {
-            return count == 0;
+            return getItems().isEmpty();
         }
+
         public void buyItem(Characters_init player) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter the name of the item you want to buy: ");
-            String itemName = scanner.nextLine();
-            for (int i = 0; i < count; i++) {
-                if (items[i].getName().equals(itemName)) {
-                    if (player.getGold() >= items[i].getBuyPrice()) {
-                        player.setGold(player.getGold() - items[i].getBuyPrice());
-                        player.getInventory().addItem(items[i]);
-                        System.out.println("You bought " + items[i].getName());
+            int itemNumber = scanner.nextInt();
+            for (Items item : getItems()) {
+                if (itemNumber == getItems().indexOf(item)) {
+                    if (player.getGold() >= item.getBuyPrice()) {
+                        player.setGold(player.getGold() - item.getBuyPrice());
+                        player.getInventory().addItem(item);
+                        System.out.println("You bought " + item.getName());
+                        player.updateAllQuests(null, item, null);
+                        break;
                     } else {
                         System.out.println("Not enough gold!");
                     }
                     break;
-                } else{System.out.println("There's no item named"+ itemName);}
+                } else {
+                    System.out.println("There's no item with number " + itemNumber);
+                }
             }
         }
     }
