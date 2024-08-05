@@ -5,7 +5,13 @@ import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Players.Leveling;
 import lolice.xyz.Items.Items;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Quest {
+    public static Object QuestType;
     private final String name;
     private int expReward;
     private int goldReward;
@@ -17,13 +23,16 @@ public class Quest {
     private Items itemReward;
     private String origin;
     private Quest nextQuest;
+    private QuestType type;
+    private boolean isReturned;
+    private List<PostCompletionAction> postCompletionActionList;
 
-    public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal) {
-        this(name, mission, exp, gold, dialog, conditionGoal, null);
+    public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal, QuestType type) {
+        this(name, mission, exp, gold, dialog, conditionGoal, null, type);
     }
 
 
-    public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal, Items itemReward) {
+    public Quest(String name, String mission, int exp, int gold, String dialog, int conditionGoal, Items itemReward, QuestType type) {
         this.name = name;
         this.expReward = exp;
         this.goldReward = gold;
@@ -33,6 +42,9 @@ public class Quest {
         this.conditionGoal = conditionGoal;
         this.itemReward = itemReward;
         this.nextQuest = null;
+        this.type = type;
+        this.isReturned = false;
+        this.postCompletionActionList = new ArrayList<>();
     }
 
     //getters
@@ -76,9 +88,18 @@ public class Quest {
         return origin;
     }
 
+    public QuestType getType() {
+        return type;
+    }
+
     public Quest getNextQuest() {
         return nextQuest;
     }
+
+    public boolean isReturned() {
+        return isReturned;
+    }
+
     //setters
     public void setExp(int exp) {
         this.expReward = exp;
@@ -94,6 +115,20 @@ public class Quest {
 
     public void setNextQuest(Quest nextQuest) {
         this.nextQuest = nextQuest;
+    }
+
+    public void setReturned(boolean returned) {
+        isReturned = returned;
+    }
+
+    public void addPostCompletionAction(PostCompletionAction action) {
+        postCompletionActionList.add(action);
+    }
+
+    public void postCompletionActions(Characters_init player, NPC npc) {
+        for (PostCompletionAction action : postCompletionActionList) {
+            action.execute(player, npc);
+        }
     }
 
     public void showQuestInfo() {
@@ -112,22 +147,24 @@ public class Quest {
         System.out.println("Condition: " + condition);
     }
 
-    public void updateProgress(Characters_init player) {
+    public void updateProgress() {
         this.condition++;
         if (this.condition >= this.conditionGoal) {
             this.condition = this.conditionGoal;
             this.completed = true;
-            checkQuestCompletion(player);
         }
     }
 
-    public void checkQuestCompletion(Characters_init player) {
+    public void checkQuestCompletion(Characters_init player, NPC npc) {
         if (this.completed) {
             System.out.println("Quest completed!");
             Leveling.gainExp(this.expReward, player);
             giveGoldReward(player);
             giveItemReward(player);
+            this.postCompletionActions(player, npc);
             if (this.nextQuest != null) {
+                npc.addQuest(this.nextQuest);
+                System.out.println("New quest available, talk to " + npc.getName() + " to start it.");
                 player.addActiveQuest(this.nextQuest);
             }
         } else {
@@ -136,12 +173,13 @@ public class Quest {
     }
 
     public void defeatEnemyCondition(Enemy_init enemy, Characters_init player) {
+        if(enemy == null) {
+            return;
+        }
         if(!this.isCompleted() && this.mission.contains("Defeat "+enemy.getName())) {
-            this.updateProgress(player);
+            this.updateProgress();
         }
     }
-
-    //TODO: Buy item condition
 
     public void giveItemReward(Characters_init player) {
         if (this.completed && this.itemReward != null) {
@@ -152,6 +190,20 @@ public class Quest {
     public void giveGoldReward(Characters_init player) {
         if (this.completed) {
             player.setGold(player.getGold() + this.goldReward);
+        }
+    }
+    public void buyItemCondition(Items item, Characters_init player) {
+        if(this.getMission().contains(item.getName())) {
+            this.updateProgress();
+        }
+        else if(this.getMission().contains("Buy any")) {
+            this.updateProgress();
+        }
+    }
+
+    public void talkToCondition(NPC npc, Characters_init player) {
+        if(this.getMission().contains(npc.getName())) {
+            this.updateProgress();
         }
     }
 }
