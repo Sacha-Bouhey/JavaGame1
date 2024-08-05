@@ -1,6 +1,7 @@
 
 package lolice.xyz.Enemies;
 
+import lolice.xyz.Players.Leveling;
 import lolice.xyz.Skill.Skill;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class Enemy_init {
     private int defence;
     private List<Skill> skills;
     private boolean isStunned;
+    private Leveling leveling;
 
     public Enemy_init(String Ename, int Ehealth, int Estrength, int Emana, int Edefence, List<Skill> Eskills) {
         this.name = Ename;
@@ -22,6 +24,7 @@ public class Enemy_init {
         this.defence = Edefence;
         this.skills = Eskills;
         this.isStunned = false;
+        this.leveling = new Leveling(0, 1);
     }
 
     public Enemy_init(Enemy_init enemy) {
@@ -30,7 +33,7 @@ public class Enemy_init {
         this.strength = enemy.strength;
         this.mana = enemy.mana;
         this.defence = enemy.defence;
-        this.skills = enemy.skills; // Assuming skills are immutable or shared
+        this.skills = enemy.skills;
     }
 
     //Getters
@@ -54,6 +57,9 @@ public class Enemy_init {
     }
     public boolean isStunned() {
         return isStunned;
+    }
+    public Leveling getLeveling() {
+        return leveling;
     }
 
     //Setters
