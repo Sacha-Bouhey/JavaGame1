@@ -36,15 +36,7 @@ public class Menu {
         }
     }
 
-    private Skill_stats getSkill_statsByName(String skill_stats_name){
-        for(Skill_stats skill_stats : player.getSkill_stats()) {
-            if(skill_stats.getSkill_name().equals(skill_stats_name)) {
-                return skill_stats;
-            }
-        }return null;
-    }
-
-    private void iddleMenu(Characters_init player) {
+    public void iddleMenu(Characters_init player) {
         while (true) {
             System.out.println("What do you want to do?");
             Scanner UserChoice = new Scanner(System.in);
@@ -85,7 +77,7 @@ public class Menu {
                 player.showQuestMenu();
             }
             else if (Choice == 6) {
-                playerSkillStatsUpgrade();
+                player.playerSkillStatsUpgrade();
             }
             else if (Choice == 7) {
                 //TODO: move somewhere else
@@ -108,7 +100,7 @@ public class Menu {
                             }
                         } else {
                             System.out.println("Returning to main menu...");
-                            startMenu(player);
+                            iddleMenu(player);
                             return;
                         }
                     } catch (Exception e) {
@@ -129,37 +121,4 @@ public class Menu {
         }
     }
 
-
-
-
-
-    public void playerSkillStatsUpgrade() {
-        while (true) {
-            System.out.println("What do you want to upgrade?");
-            Scanner UserChoice = new Scanner(System.in);
-            System.out.println("1. Staff");
-            System.out.println("2. Books");
-            System.out.println("3. Magic gauntlet ");
-            System.out.println("0. Return to main menu");
-            System.out.println("Enter your choice: ");
-            int Choice = UserChoice.nextInt();
-            if (Choice == 1) {
-                Skill_stats skill_stats = getSkill_statsByName("Staff");
-                skill_stats.upgradeSkillStats(skill_stats, player);
-                break;
-            }
-            else if(Choice == 2) {
-                Skill_stats skill_stats = getSkill_statsByName("Books");
-                skill_stats.upgradeSkillStats(skill_stats, player);
-                break;
-            } else if (Choice == 3) {
-                Skill_stats skill_stats = getSkill_statsByName("Magic gauntlet");
-                skill_stats.upgradeSkillStats(skill_stats, player);
-                break;
-            }
-            else{
-                System.out.println("Invalid choice");
-            }
-        }
-    }
 }
