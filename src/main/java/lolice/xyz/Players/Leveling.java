@@ -64,4 +64,12 @@ public class Leveling {
         player.setAgility(player.getAgility() + 5);
         player.setDefence(player.getDefence() + 5);
     }
+
+    public int getTotalExp() {
+        int totalExp = 0;
+        for(int i = 1; i < level; i++) {
+            totalExp += (int) (exptolevel / 1.2);
+        }
+        return totalExp + exp;
+    }
 }
