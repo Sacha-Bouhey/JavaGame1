@@ -725,6 +725,7 @@ public class Characters_init{
     public void stunEnemy(Enemy_init enemy) {
         enemy.setStunned(true);
     }
+
 }
 
 
