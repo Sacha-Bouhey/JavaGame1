@@ -1,5 +1,6 @@
 package lolice.xyz;
 
+import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.NPC.NPC;
 
@@ -62,9 +63,12 @@ public class Location {
             return this.enemies;
         }
 
-        public Enemy_init selectRandomEnemy() {
+        public Enemy_init selectRandomEnemy(Characters_init player) {
             int randomIndex = (int) (Math.random() * enemies.size());
-            return new Enemy_init(enemies.get(randomIndex));
+            Enemy_init selectedEnemy = new Enemy_init(enemies.get(randomIndex));
+            int enemyLevel = (int) (Math.random() * (player.getLeveling().getLevel() +2)) + 1;
+            selectedEnemy.getLeveling().setLevel(enemyLevel);
+            return selectedEnemy;
         }
     }
 
