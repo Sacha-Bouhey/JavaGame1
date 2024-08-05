@@ -134,8 +134,9 @@ public class Characters_init{
     public List<Quest> getFinishedQuest() {
         List<Quest> finishedQuests = new ArrayList<>();
         for(Quest quest : activeQuests) {
-            if(quest.isCompleted()) {
+            if(quest.isCompleted() && !quest.isReturned()) {
                 finishedQuests.add(quest);
+                quest.setReturned(true);
             }
         }
         return finishedQuests;
@@ -299,6 +300,42 @@ public class Characters_init{
         return adjacentLocations;
     }
 
+    private Skill_stats getSkill_statsByName(String skill_stats_name){
+        for(Skill_stats skill_stats : this.getSkill_stats()) {
+            if(skill_stats.getSkill_name().equals(skill_stats_name)) {
+                return skill_stats;
+            }
+        }return null;
+    }
+
+
+    public void playerSkillStatsUpgrade() {
+        while (true) {
+            System.out.println("What do you want to upgrade?");
+            Scanner UserChoice = new Scanner(System.in);
+            for (Skill_stats skill_stats : this.getSkill_stats()) {
+                if(skill_stats.getClass_name().equals(this.getName())) {
+                    System.out.println(skill_stats.getSkill_name() + " level: " + skill_stats.getSkill_level());
+                }
+            }
+            System.out.println("Enter your choice: ");
+
+            int Choice = UserChoice.nextInt();
+            Skill_stats skillStats = this.getSkill_stats().get(Choice);
+            System.out.println("You have " + this.getStatpoint() + " stat points");
+            System.out.println("How many points do you want to use ?");
+            int points = UserChoice.nextInt();
+            if (this.getStatpoint() > points) {
+                skillStats.setSkill_stats(skillStats.getSkill_level() + points);
+                this.setStatpoint(this.getStatpoint() - points);
+                System.out.println("You upgraded: " + skillStats.getSkill_name() + " to level " + skillStats.getSkill_level());
+            } else {
+                System.out.println("You don't have enough stat points");
+            }
+        }
+    }
+
+
     //Move
     public void moveNorth() {
         y += 1;
@@ -369,29 +406,45 @@ public class Characters_init{
     }
 
     //Update all quests
-    public void updateAllQuests(Enemy_init enemy) {
+    public void updateAllQuests(Enemy_init enemy, Items item, NPC npc) {
         if (activeQuests.isEmpty()) {
             return;
         }
         for(Quest quest : activeQuests) {
-            quest.defeatEnemyCondition(enemy, this);
+            switch (quest.getType()) {
+                case KILL:
+                    quest.defeatEnemyCondition(enemy, this);
+                    break;
+
+                case BUY:
+                    quest.buyItemCondition(item, this);
+                    break;
+
+                case TALK:
+                    quest.talkToCondition(npc, this);
+                    break;
+            }
         }
     }
 
     public void talkToNPC() {
         System.out.println("Who do you want to talk to?");
-        if (this.getCurrentLocation() instanceof Location.Village) {
-            ((Location.Village) this.getCurrentLocation()).showNPCInfo();
 
-            Scanner UserChoice2 = new Scanner(System.in);
-            System.out.println("Enter your choice: ");
-            String Choice2 = UserChoice2.nextLine();
+        boolean validInput = false;
+        while (!validInput) {
+            if (this.getCurrentLocation() instanceof Location.Village) {
+                ((Location.Village) this.getCurrentLocation()).showNPCInfo();
+                Scanner UserChoice2 = new Scanner(System.in);
+                System.out.println("Enter your choice: ");
+                String Choice2 = UserChoice2.nextLine();
 
-
-            for (NPC npc : ((Location.Village) this.getCurrentLocation()).getNPC()) {
-                if (Choice2.equals(npc.getName())) {
-                    this.npcDialog(npc);
-                }else {System.out.println("There's no NPC named: " + Choice2);}
+                for (NPC npc : ((Location.Village) this.getCurrentLocation()).getNPC()) {
+                    if (Choice2.equals(npc.getName())) {
+                        this.npcDialog(npc);
+                        this.updateAllQuests(null, null, npc);
+                        validInput = true;
+                    }
+                }
             }
         }
     }
@@ -420,10 +473,10 @@ public class Characters_init{
                     } else if (Choice3 == 2) {
                         System.out.println("Quest declined");
                     } else {
-                        System.out.println("Invalid choice");
+                        System.out.println("Invalid choice. Pleaser enter 1 or 2");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println("Invalid choice");
+                    System.out.println("Invalid choice. Please enter a number.");
                 }
             }
         }
@@ -431,17 +484,18 @@ public class Characters_init{
         public void npcShop(NPC npc) {
             npc.getShop().showShop();
             if(!npc.getShop().isEmpty()) {
-                System.out.println("You have " + this.getGold() + " gold");
+                System.out.println("You have " + this.getGold() + " gold \n");
 
                 Scanner UserChoice4 = new Scanner(System.in);
                 System.out.println("Do you want to buy something?");
                 System.out.println("1. Yes");
                 System.out.println("2. No");
-                if(UserChoice4.nextInt() == 1) {
+                int choice = UserChoice4.nextInt();
+                if(choice == 1) {
                     npc.getShop().buyItem(this);
                     npcDialog(npc);
                 }
-                else if(UserChoice4.nextInt() == 2) {
+                else if(choice == 2) {
                     System.out.println("You left the shop");
                     npcDialog(npc);
                 } else {System.out.println("Invalid choice");}
@@ -450,60 +504,65 @@ public class Characters_init{
 
 
 
-        public void npcDialog(NPC npc){
-            boolean hasFinishedQuest = false;
-            System.out.println(npc.getDialog());
-            Scanner UserChoice3 = new Scanner(System.in);
-            System.out.println("What do you want to do?");
-            System.out.println("1. Show quests");
-            System.out.println("2. Enter shop");
+    public void npcDialog(NPC npc) {
+        boolean hasFinishedQuest = false;
+        System.out.println(npc.getDialog());
+        Scanner userChoiceScanner = new Scanner(System.in);
+        System.out.println("What do you want to do?");
+        System.out.println("1. Show quests");
+        System.out.println("2. Enter shop");
 
+        List<Quest>finishedQuest = getFinishedQuest();
 
-
-            if(!getFinishedQuest().isEmpty()) {
-
-                for(Quest quest : getFinishedQuest()) {
-                    if (quest.getOrigin().equals(npc.getName())) {
-                        hasFinishedQuest = true;
-                        break;
-                    }
-                }
-                if(hasFinishedQuest) {
-                    System.out.println("3. Return quest");
+        if (!finishedQuest.isEmpty()) {
+            for (Quest quest : finishedQuest){
+                if (quest.getOrigin().equals(npc.getName())) {
+                    hasFinishedQuest = true;
+                    break;
                 }
             }
-
-
-            System.out.println("0. Exit");
-
-            int choice = UserChoice3.nextInt();
-
-            if(choice == 1) {
-                if(!npc.getQuest().isEmpty()){
-                    this.choiceQuest(npc);
-                } else{System.out.println("No quests currently available \n");}
-            }
-            else if(choice == 2) {
-                this.npcShop(npc);
-            }
-            if(hasFinishedQuest) {
-                if(choice == 3) {
-                    for(Quest quest : getFinishedQuest()) {
-                        if (quest.getOrigin().equals(npc.getName())) {
-                            System.out.println("You returned the quest: " + quest.getName());
-                            quest.checkQuestCompletion(this);
-                        }
-                    }
-                }
-            }
-
-            else if(choice == 0) {
-                System.out.println("You left the NPC");
-            }
-            else {
-                System.out.println("Invalid choice");
+            if (hasFinishedQuest) {
+                System.out.println("3. Return quest");
             }
         }
+
+        System.out.println("0. Exit");
+
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+
+                //Test Integer.parseInt for error catching.
+                int choice = Integer.parseInt(userChoiceScanner.nextLine());
+                if (choice == 1) {
+                    if (!npc.getQuest().isEmpty()) {
+                        this.choiceQuest(npc);
+                    } else {
+                        System.out.println("No quests currently available \n");
+                    }
+                    validInput = true;
+                } else if (choice == 2) {
+                    this.npcShop(npc);
+                    validInput = true;
+                } else if (hasFinishedQuest && choice == 3) {
+                    for (Quest quest : finishedQuest) {
+                        if (quest.getOrigin().equals(npc.getName())) {
+                            System.out.println("You returned the quest: " + quest.getName());
+                            quest.checkQuestCompletion(this, npc);
+                        }
+                    }
+                    validInput = true;
+                } else if (choice == 0) {
+                    System.out.println("You left the NPC");
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid choice.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid choice. Please enter a number.");
+            }
+        }
+    }
 
 
 
@@ -577,9 +636,8 @@ public class Characters_init{
         }
         Scanner UserChoice = new Scanner(System.in);
         int choice = UserChoice.nextInt();
-        Items item = this.inventory.getItems()[choice];
-        if(item instanceof Items.Potion) {
-            Items.Potion potion = (Items.Potion) item;
+        Items item = this.inventory.getItems().get(choice);
+        if(item instanceof Items.Potion potion) {
             this.health += potion.getHealth();
             if(this.health > this.maxhealth) {
                 this.health = this.maxhealth;
@@ -615,13 +673,13 @@ public class Characters_init{
 
                 } else if (choice == 3) {
                     System.out.println("Which item do you want to equip?");
-                    for (int i = 0; i < this.inventory.getItems().length; i++) {
-                        if (this.inventory.getItems()[i] != null) {
-                            System.out.println(i + ". " + this.inventory.getItems()[i].getName());
+                    for (int i = 0; i < this.inventory.getItems().size(); i++) {
+                        if (this.inventory.getItems().get(i) != null) {
+                            System.out.println(i + ". " + this.inventory.getItems().get(i).getName());
                         }
                     }
                     int userChoice = UserChoice.nextInt();
-                    Items item = this.inventory.getItems()[userChoice];
+                    Items item = this.inventory.getItems().get(userChoice);
                     this.equipItem(item);
                     break;
 
@@ -638,7 +696,7 @@ public class Characters_init{
                     System.out.println("Invalid choice");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid choice");
+                System.out.println("Invalid choice 2");
             }
 
         }
@@ -647,12 +705,12 @@ public class Characters_init{
     public void showQuestMenu() {
         int count = 0;
         for (Quest quest : activeQuests) {
-            if (quest.isCompleted()) {
+            if (quest.isCompleted() && !quest.isReturned()) {
                 if(count == 0) {
                     System.out.println("Completed quests");
                     count++;
                 }
-                System.out.println(quest.getName() + " Return quest to: " + quest.getOrigin());
+                System.out.println(quest.getName() + "\n"+ "Return quest to: " + quest.getOrigin() + "\n");
             }
         }
         for (Quest quests : activeQuests) {
