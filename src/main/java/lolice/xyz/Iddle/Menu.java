@@ -29,7 +29,7 @@ public class Menu {
                 iddleMenu(player);
             } else if (Choice == 2) {
                 System.out.println("Game exited, goodbye !");
-                System.exit(0);
+                return;
             } else {
                 System.out.println("Invalid choice");
             }
@@ -92,7 +92,7 @@ public class Menu {
                             if (player.getCurrentLocation() instanceof Location.Village) {
                                 break;
                             } else if (player.getCurrentLocation() instanceof Location.Wilderness) {
-                                Battle battle = new Battle(player, ((Location.Wilderness) player.getCurrentLocation()).selectRandomEnemy());
+                                Battle battle = new Battle(player, ((Location.Wilderness) player.getCurrentLocation()).selectRandomEnemy(player));
                                 battle.Start();
                                 break;
                             } else if (player.getCurrentLocation() instanceof Location.Dungeon) {
@@ -111,9 +111,10 @@ public class Menu {
             else if (Choice == 8) {
                 player.talkToNPC();
             }
+
             else if (Choice == 0) {
                 System.out.println("Returning to main menu...");
-                startMenu(player);
+                return;
             }
             else {
                 System.out.println("Invalid choice");
