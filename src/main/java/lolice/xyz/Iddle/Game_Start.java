@@ -1,13 +1,13 @@
 package lolice.xyz.Iddle;
 
+import lolice.xyz.Items.GameObjects;
 import lolice.xyz.Items.Items;
 import lolice.xyz.Location;
 import lolice.xyz.Players.Characters;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Players.Player_choice;
 import lolice.xyz.Players.Player_init;
-import lolice.xyz.NPC.Quest;
-import lolice.xyz.NPC.NPC;
+import lolice.xyz.NPC.*;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Skill.Skill;
 
@@ -39,23 +39,44 @@ public class Game_Start {
         Location_init.add(new Location.Wilderness("Forest", 1, 0, false, "The forest is a dangerous place with monsters lurking around.", Enemies_init.get("Forest")));
         Location_init.add(new Location("Cave", 0, 1, false, "The cave is a dark and mysterious place with hidden treasures."));
         Location_init.add(new Location("Castle", 0, -1, false, "The castle is a place where the king resides and holds great power."));
+
+
+        if (Location_init.getFirst() instanceof Location.Village) {
+            ((Location.Village) Location_init.getFirst()).addNPC(NPC_init.get("Tutorial villager"));
+            ((Location.Village) Location_init.getFirst()).addNPC(NPC_init.get("Anderson"));
+        }
     }
 
     public static void initNPC() {
-        Quest_init.put("Tutorial 1",new Quest("Tutorial 1: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest.", 2, new Items.Weapon.mageWeapon("Wooden staff", "A basic staff for beginners", 10, 25, false, 2, 100, 1, 1, 10, 100)));
+        Quest_init.put("Tutorial 1", new Quest("Tutorial 1: Talk to: Anderson", "Talk to Anderson", 10, 10, "You must talk to Anderson to complete this quest.", 1, QuestType.TALK));
 
-        Quest_init.get("Tutorial 1").setNextQuest(new Quest("Tutorial 2: Buy something in the shop","Buy in shop", 100, 100, "Buy any item in the shop to complete this quest", 1));
+        Quest_init.get("Tutorial 1").addPostCompletionAction(new UnlockLocationAction("Forest"));
+
+        Quest_init.put("Tutorial 2", new Quest("Tutorial 2: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest. You can find goblins in the forest.", 2, new Items.Weapon.mageWeapon("Wooden staff", "A basic staff for beginners", 10, 25, false, 2, 100, 1, 1, 10, 100), QuestType.KILL));
+
+        Quest_init.get("Tutorial 2").addPostCompletionAction(new AddItemToShopAction(GameObjects.SMALL_HEALING_POTION));
+
+        Quest_init.get("Tutorial 2").setNextQuest(new Quest("Tutorial 3: Buy something in the shop","Buy any", 100, 100, "Buy any item in the shop to complete this quest", 1, QuestType.BUY));
+
+        Quest_init.get("Tutorial 1").setNextQuest(Quest_init.get("Tutorial 2"));
+
 
         NPC_init.put("Tutorial villager", new NPC("Tutorial villager", 100, 10, 1,1000, """
                 Hello adventurer! \
-                I have a quest for you. You must defeat 2 goblins to complete this quest.\s
-                 You can find goblins in the forest. Good luck!\
+                If you're new here, I have some quests for you !\s
+                They will help you during your journey !\
                 Oh, and also if you have some gold you can buy things in my shop !\s
                 """));
 
-        NPC_init.get("Tutorial villager").addQuest(Quest_init.get("Tutorial 1"));
+        NPC_init.put("Anderson", new NPC("Anderson", 100, 10, 1, 1000, """
+                Hello adventurer! \
+                You must be the one Tutorial villager told me about. \
+                Go talk to him again, he has another quest for you.\s
+                """));
 
-        NPC_init.get("Tutorial villager").getShop().addItem(new Items.Potion("Small healing potion", "Heals you for 20 HP", 0, 0, false, 20, 0));
+
+
+        NPC_init.get("Tutorial villager").addQuest(Quest_init.get("Tutorial 1"));
     }
 
     public static void lore() {
@@ -77,15 +98,11 @@ public class Game_Start {
         System.out.println("Yes ! you were a: " + player.getName() + "! You can finally start your journey");
         System.out.println("Good luck !");
         player.setLocations(Location_init);
-        if (Location_init.getFirst() instanceof Location.Village) {
-            ((Location.Village) Location_init.getFirst()).addNPC(NPC_init.get("Tutorial villager"));
-        }
         Menu menu = new Menu(player);
         System.out.println("Do you want to read the tutorial? (y/n)");
         Scanner scanner = new Scanner(System.in);
         String tutorial = scanner.nextLine();
         if (tutorial.equals("y")) {
-            //TODO: Add func to show each line when enter is pressed
             System.out.println("Tutorial:");
             System.out.println("You can explore the world by moving to different locations.");
             scanner.nextLine();
