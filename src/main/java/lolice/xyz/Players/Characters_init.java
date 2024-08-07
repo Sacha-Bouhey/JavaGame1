@@ -1,5 +1,6 @@
 package lolice.xyz.Players;
 
+import lolice.xyz.Battle;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Items.Inventory;
 import lolice.xyz.Items.Items;
@@ -10,10 +11,14 @@ import lolice.xyz.Skill_stats;
 import lolice.xyz.Location;
 import lolice.xyz.NPC.Quest;
 
+import java.io.Serial;
 import java.util.*;
+import java.io.Serializable;
 
 
-public class Characters_init{
+public class Characters_init implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String name;
     private int maxhealth;
     private int health;
@@ -24,9 +29,9 @@ public class Characters_init{
     private int agility;
     private int defence;
     private int statpoint;
-    private List<Skill> skills;
+    private final List<Skill> skills;
     private Leveling leveling;
-    private List<Skill_stats> skill_stats;
+    private final List<Skill_stats> skill_stats;
     private int gold;
     private List<Quest> activeQuests;
     private int x;
@@ -726,6 +731,34 @@ public class Characters_init{
         enemy.setStunned(true);
     }
 
+
+    public void exploreLocation(){
+        while(true) {
+            try {
+                System.out.println("If you are in the wilderness, you will encounter enemies. Are you sure you want to explore? (y/n)");
+                Scanner UserChoice2 = new Scanner(System.in);
+                String Choice2 = UserChoice2.nextLine();
+                if (Choice2.equals("y")) {
+                    System.out.println("Exploring current location...");
+                    this.getCurrentLocation().showLocationInfo();
+                    if (this.getCurrentLocation() instanceof Location.Village) {
+                        break;
+                    } else if (this.getCurrentLocation() instanceof Location.Wilderness) {
+                        Battle battle = new Battle(this, ((Location.Wilderness) this.getCurrentLocation()).selectRandomEnemy(this));
+                        battle.Start();
+                        break;
+                    } else if (this.getCurrentLocation() instanceof Location.Dungeon) {
+                        break;
+                    }
+                } else {
+                    System.out.println("Returning to main menu...");
+                    return;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid choice");
+            }
+        }
+    }
 }
 
 

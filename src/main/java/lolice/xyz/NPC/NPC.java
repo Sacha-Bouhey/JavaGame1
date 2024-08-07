@@ -3,10 +3,14 @@ package lolice.xyz.NPC;
 import lolice.xyz.Items.Inventory;
 import lolice.xyz.Players.Characters_init;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NPC {
+public class NPC implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String name;
     private int hp;
     private int damage;

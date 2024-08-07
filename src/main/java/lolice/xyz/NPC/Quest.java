@@ -6,11 +6,15 @@ import lolice.xyz.Players.Leveling;
 import lolice.xyz.Items.Items;
 
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Quest {
+public class Quest implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     public static Object QuestType;
     private final String name;
     private int expReward;

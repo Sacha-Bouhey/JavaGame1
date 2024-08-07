@@ -3,7 +3,12 @@ package lolice.xyz.Skill;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Players.Characters_init;
 
-public class Effect {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Effect implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String EffectName;
     private final String Description;
     private final int Damage;

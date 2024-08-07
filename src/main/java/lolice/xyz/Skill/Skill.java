@@ -3,9 +3,13 @@ package lolice.xyz.Skill;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Players.Characters_init;
 
+import java.io.Serial;
 import java.util.List;
+import java.io.Serializable;
 
-public class Skill {
+public class Skill implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String SkillName;
     private final String Description;
     private final int Damage;

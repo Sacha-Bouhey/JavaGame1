@@ -11,6 +11,10 @@ import lolice.xyz.NPC.*;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Skill.Skill;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 
@@ -20,10 +24,25 @@ public class Game_Start {
     public static List<Location> Location_init = new ArrayList<>();
     public static Map <String, List<Enemy_init>> Enemies_init = new HashMap<>();
     public static void main(String[] args) {
-        initEnemies();
-        initNPC();
-        initLocation();
-        lore();
+        Characters_init player = loadPlayer();
+        if (player == null) {
+            initEnemies();
+            initNPC();
+            initLocation();
+            lore();
+        } else {
+            Menu menu = new Menu(player);
+            menu.showStartMenu();
+        }
+    }
+
+    private static Characters_init loadPlayer(){
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("save.dat"))){
+            System.out.println("Loading save file automatically");
+            return (Characters_init) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            return null;
+        }
     }
 
     public static void initEnemies() {

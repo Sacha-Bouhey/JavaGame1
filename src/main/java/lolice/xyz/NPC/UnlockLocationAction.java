@@ -3,7 +3,12 @@ package lolice.xyz.NPC;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Items.Items;
 
-public class UnlockLocationAction implements PostCompletionAction {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class UnlockLocationAction implements PostCompletionAction, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String location;
 
     public UnlockLocationAction(String location) {

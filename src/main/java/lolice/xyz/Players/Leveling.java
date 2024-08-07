@@ -2,7 +2,12 @@ package lolice.xyz.Players;
 
 import lolice.xyz.Enemies.Enemy_init;
 
-public class Leveling {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Leveling implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     public int exp = 0;
     public int level = 1;
     public int exptolevel = 100;

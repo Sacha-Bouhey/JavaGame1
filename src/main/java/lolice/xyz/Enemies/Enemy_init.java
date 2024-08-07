@@ -4,15 +4,19 @@ package lolice.xyz.Enemies;
 import lolice.xyz.Players.Leveling;
 import lolice.xyz.Skill.Skill;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
-public class Enemy_init {
-    private String name;
+public class Enemy_init implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+    private final String name;
     private int health;
     private int strength;
     private int mana;
     private int defence;
-    private List<Skill> skills;
+    private final List<Skill> skills;
     private boolean isStunned;
     private Leveling leveling;
 

@@ -4,10 +4,14 @@ import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.NPC.NPC;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Location {
+public class Location implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String name;
     private int x;
     private int y;

@@ -1,9 +1,12 @@
 package lolice.xyz;
 
-import lolice.xyz.Players.Characters_init;
-import lolice.xyz.Skill.Skill;
 
-public class Skill_stats {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Skill_stats implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String skill_name;
     private final String class_name;
     private int skill_level;
@@ -30,25 +33,5 @@ public class Skill_stats {
     public void showSkillStats() {
         System.out.println("Skill name: " + this.skill_name + " Skill level: " + this.skill_level);
     }
-
-//    public void upgradeSkillStats(Skill_stats skill_stats, Characters_init player) {
-//        if(player.getStatpoint() > 0) {
-//            player.setStatpoint(player.getStatpoint() -1);
-//            skill_stats.setSkill_stats(skill_stats.getSkill_level() + 1);
-//            System.out.println("Skill upgraded !");
-//        }
-//        else {
-//            System.out.println("Not enough stat points");
-//        }
-//        if("Staff".equals(skill_stats.getSkill_name()) && skill_stats.getSkill_level() == 1) {
-//            for(Skill skill : player.getSkills()) {
-//                if("Fireball".equals(skill.getSkillName())) {
-//                    skill.setActive();
-//                    System.out.println("Unlocked skill: Fireball");
-//                    break;
-//                }
-//            }
-//        }
-//    }
 }
 

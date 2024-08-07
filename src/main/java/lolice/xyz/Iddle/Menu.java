@@ -1,12 +1,13 @@
 package lolice.xyz.Iddle;
-import lolice.xyz.Battle;
-import lolice.xyz.Location;
 import lolice.xyz.Players.Characters_init;
-import lolice.xyz.Skill_stats;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 public class Menu {
-    private Characters_init player;
+    private final Characters_init player;
 
     public Menu(Characters_init player) {
         this.player = player;
@@ -48,6 +49,7 @@ public class Menu {
             System.out.println("6. Upgrade your weapon skills");
             System.out.println("7. Explore current location");
             System.out.println("8. Talk to an NPC");
+            System.out.println("9. Save game");
             System.out.println("0. Return to main menu");
             System.out.println("Enter your choice: ");
             int Choice = UserChoice.nextInt();
@@ -80,36 +82,13 @@ public class Menu {
                 player.playerSkillStatsUpgrade();
             }
             else if (Choice == 7) {
-                //TODO: move somewhere else
-                System.out.println("If you are in the wilderness, you will encounter enemies. Are you sure you want to explore? (y/n)");
-                while(true) {
-                    try {
-                        Scanner UserChoice2 = new Scanner(System.in);
-                        String Choice2 = UserChoice2.nextLine();
-                        if (Choice2.equals("y")) {
-                            System.out.println("Exploring current location...");
-                            player.getCurrentLocation().showLocationInfo();
-                            if (player.getCurrentLocation() instanceof Location.Village) {
-                                break;
-                            } else if (player.getCurrentLocation() instanceof Location.Wilderness) {
-                                Battle battle = new Battle(player, ((Location.Wilderness) player.getCurrentLocation()).selectRandomEnemy(player));
-                                battle.Start();
-                                break;
-                            } else if (player.getCurrentLocation() instanceof Location.Dungeon) {
-                                break;
-                            }
-                        } else {
-                            System.out.println("Returning to main menu...");
-                            iddleMenu(player);
-                            return;
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Invalid choice");
-                    }
-                }
+                player.exploreLocation();
             }
             else if (Choice == 8) {
                 player.talkToNPC();
+            }
+            else if (Choice == 9) {
+                savePlayer(player);
             }
 
             else if (Choice == 0) {
@@ -119,6 +98,15 @@ public class Menu {
             else {
                 System.out.println("Invalid choice");
             }
+        }
+    }
+
+    private void savePlayer(Characters_init player){
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("save.dat"))){
+            oos.writeObject(player);
+            System.out.println("Player data saved successfully");
+        } catch (IOException e) {
+            System.out.println("Error saving player data" + e.getMessage());
         }
     }
 

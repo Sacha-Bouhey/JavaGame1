@@ -2,11 +2,15 @@ package lolice.xyz.Items;
 
 import lolice.xyz.Players.Characters_init;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Inventory {
+public class Inventory implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private List<Items> items;
     private final int size;
 

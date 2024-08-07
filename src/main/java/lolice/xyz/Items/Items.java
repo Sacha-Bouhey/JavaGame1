@@ -2,7 +2,12 @@ package lolice.xyz.Items;
 
 import lolice.xyz.Skill.Skill;
 
-public class Items {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Items implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String name;
     private final String description;
     private final int sellPrice;
