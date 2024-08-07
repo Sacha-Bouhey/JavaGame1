@@ -1,5 +1,6 @@
 package lolice.xyz.Items;
 
+import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Skill.Skill;
 
 import java.io.Serial;
@@ -192,5 +193,13 @@ public class Items implements Serializable {
         public int getMana() {
             return mana;
         }
+    }
+
+    public static class Key extends Items {
+        public Key(String name, String description, int sellPrice, int buyPrice, boolean stackable) {
+            super(name, description, sellPrice, buyPrice, stackable);
+        }
+
+
     }
 }
