@@ -174,7 +174,7 @@ public class Battle {
         for(Effect effect : activeEffects) {
             effect.removeEffect(player, enemies);
         }
-        System.out.println("You have gained " + " experience points");
+        System.out.println("You have gained " + enemies.getLeveling().getTotalExp() / 8 + " experience points");
         Leveling.gainExp(enemies.getLeveling().getTotalExp() / 8, player);
         player.updateAllQuests(enemies, null, null);
     }
