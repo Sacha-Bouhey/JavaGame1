@@ -38,6 +38,7 @@ public class Enemy_init implements Serializable {
         this.mana = enemy.mana;
         this.defence = enemy.defence;
         this.skills = enemy.skills;
+        this.leveling = new Leveling(0, 1);
     }
 
     //Getters
