@@ -5,10 +5,9 @@ import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Items.Inventory;
 import lolice.xyz.Items.Items;
 import lolice.xyz.NPC.NPC;
-import lolice.xyz.Skill.Effect;
 import lolice.xyz.Skill.Skill;
 import lolice.xyz.Skill_stats;
-import lolice.xyz.Location;
+import lolice.xyz.Map.Location;
 import lolice.xyz.NPC.Quest;
 
 import java.io.Serial;
@@ -141,7 +140,6 @@ public class Characters_init implements Serializable {
         for(Quest quest : activeQuests) {
             if(quest.isCompleted() && !quest.isReturned()) {
                 finishedQuests.add(quest);
-                quest.setReturned(true);
             }
         }
         return finishedQuests;
@@ -416,18 +414,20 @@ public class Characters_init implements Serializable {
             return;
         }
         for(Quest quest : activeQuests) {
-            switch (quest.getType()) {
-                case KILL:
-                    quest.defeatEnemyCondition(enemy, this);
-                    break;
+            if(!quest.isReturned()) {
+                switch (quest.getType()) {
+                    case KILL:
+                        quest.defeatEnemyCondition(enemy, this);
+                        break;
 
-                case BUY:
-                    quest.buyItemCondition(item, this);
-                    break;
+                    case BUY:
+                        quest.buyItemCondition(item, this);
+                        break;
 
-                case TALK:
-                    quest.talkToCondition(npc, this);
-                    break;
+                    case TALK:
+                        quest.talkToCondition(npc, this);
+                        break;
+                }
             }
         }
     }
@@ -554,6 +554,7 @@ public class Characters_init implements Serializable {
                         if (quest.getOrigin().equals(npc.getName())) {
                             System.out.println("You returned the quest: " + quest.getName());
                             quest.checkQuestCompletion(this, npc);
+                            quest.setReturned(true);
                         }
                     }
                     validInput = true;
@@ -732,32 +733,38 @@ public class Characters_init implements Serializable {
     }
 
 
-    public void exploreLocation(){
-        while(true) {
+    public void exploreLocation() {
+        Scanner userChoiceScanner = new Scanner(System.in);
+        while (true) {
             try {
                 System.out.println("If you are in the wilderness, you will encounter enemies. Are you sure you want to explore? (y/n)");
-                Scanner UserChoice2 = new Scanner(System.in);
-                String Choice2 = UserChoice2.nextLine();
-                if (Choice2.equals("y")) {
+                String choice = userChoiceScanner.nextLine();
+                if (choice.equalsIgnoreCase("y")) {
                     System.out.println("Exploring current location...");
                     this.getCurrentLocation().showLocationInfo();
                     if (this.getCurrentLocation() instanceof Location.Village) {
                         break;
-                    } else if (this.getCurrentLocation() instanceof Location.Wilderness) {
-                        Battle battle = new Battle(this, ((Location.Wilderness) this.getCurrentLocation()).selectRandomEnemy(this));
+                    } else if (this.getCurrentLocation() instanceof Location.LocationWithEnemies.Wilderness) {
+                        Battle battle = new Battle(this, ((Location.LocationWithEnemies.Wilderness) this.getCurrentLocation()).selectRandomEnemy(this));
                         battle.Start();
                         break;
-                    } else if (this.getCurrentLocation() instanceof Location.Dungeon) {
+                    } else if (this.getCurrentLocation() instanceof Location.LocationWithEnemies.Dungeon) {
                         break;
                     }
-                } else {
+                } else if (choice.equalsIgnoreCase("n")) {
                     System.out.println("Returning to main menu...");
                     return;
+                } else {
+                    System.out.println("Invalid choice. Please enter 'y' or 'n'.");
                 }
+            } catch (NoSuchElementException e) {
+                System.out.println("An error occurred: No line found. Please try again.");
+                userChoiceScanner = new Scanner(System.in); // Reinitialize the scanner
             } catch (Exception e) {
-                System.out.println("Invalid choice");
+                System.out.println("An error occurred: " + e.getMessage());
             }
         }
+        userChoiceScanner.close();
     }
 }
 
