@@ -2,7 +2,7 @@ package lolice.xyz.Iddle;
 
 import lolice.xyz.Items.GameObjects;
 import lolice.xyz.Items.Items;
-import lolice.xyz.Location;
+import lolice.xyz.Map.Location;
 import lolice.xyz.Players.Characters;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Players.Player_choice;
@@ -14,7 +14,6 @@ import lolice.xyz.Skill.Skill;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.*;
 
 
@@ -55,7 +54,7 @@ public class Game_Start {
 
     public static void initLocation() {
         Location_init.add(new Location.Village("Stating village", 0, 0, true, "The starting village is a peaceful place for beginners to start their journey."));
-        Location_init.add(new Location.Wilderness("Forest", 1, 0, false, "The forest is a dangerous place with monsters lurking around.", Enemies_init.get("Forest")));
+        Location_init.add(new Location.LocationWithEnemies.Wilderness("Forest", 1, 0, false, "The forest is a dangerous place with monsters lurking around.", Enemies_init.get("Forest")));
         Location_init.add(new Location("Cave", 0, 1, false, "The cave is a dark and mysterious place with hidden treasures."));
         Location_init.add(new Location("Castle", 0, -1, false, "The castle is a place where the king resides and holds great power."));
 
