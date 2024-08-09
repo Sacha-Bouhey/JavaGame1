@@ -13,8 +13,8 @@ public class Enemy_skill_init {
             ArrayList<Integer> EnemyStats = default_enemy_value.get(EnemyName);
 
             List<Skill> GoblinSkills = new ArrayList<Skill>();
-            GoblinSkills.add(new Skill("Weak attack", "A pathetic attack", 5, 0, true, null));
-            GoblinSkills.add(new Skill("Claw attack", "Can hurt people", 6, 0, true, null));
+            GoblinSkills.add(new Skill("Weak attack", "A pathetic attack", 5, 0, true, null, false));
+            GoblinSkills.add(new Skill("Claw attack", "Can hurt people", 6, 0, true, null, false));
 
             return new Enemy_init(EnemyName, EnemyStats.get(0), EnemyStats.get(1), EnemyStats.get(2), EnemyStats.get(3), GoblinSkills);
         }

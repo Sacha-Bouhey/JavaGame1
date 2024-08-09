@@ -15,12 +15,12 @@ public class Player_init {
             ArrayList<Integer> PlayerStats = default_class_value.get(ClassName);
 
             List<Skill> MageSkills = new ArrayList<>();
-            MageSkills.add(new Skill("Fireball", "Une boule de feu globalement", 50, 20, false, null));
-            MageSkills.add(new Skill("Testball", "C'est rien tkt", 9999999, 0, true, null));
-            MageSkills.add(new Skill("Electric shock", "A simple electric shock", 20, 10, true, new ArrayList<>(Arrays.asList(new Effect("Electric shock", "Stun the enemy", 0, 1, EffectType.STUN)))));
+            MageSkills.add(new Skill("Fireball", "Une boule de feu globalement", 50, 20, false, null, false));
+            MageSkills.add(new Skill("Testball", "C'est rien tkt", 9999999, 0, true, null, false));
+            MageSkills.add(new Skill("Electric shock", "A simple electric shock", 20, 10, true, new ArrayList<>(Arrays.asList(new Effect("Electric shock", "Stun the enemy", 0, 1, EffectType.STUN))), false));
             
             List<Skill> WarriorSkills = new ArrayList<>();
-            WarriorSkills.add(new Skill("Berserker Stance", "WOW !", 0, 0, true, new ArrayList<>(Arrays.asList(new Effect("Berserker Stance", "Give 10% damage buff", 0, 2, EffectType.BUFF)))));
+            WarriorSkills.add(new Skill("Berserker Stance", "WOW !", 0, 0, true, new ArrayList<>(Arrays.asList(new Effect("Berserker Stance", "Give 10% damage buff", 0, 2, EffectType.BUFF))), false));
 
             Characters_init player;
             if(ClassName.equals("Mage")) {

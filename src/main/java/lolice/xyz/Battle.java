@@ -1,5 +1,6 @@
 package lolice.xyz;
 
+import lolice.xyz.Enemies.Enemy;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Iddle.Menu;
 import lolice.xyz.Players.Characters_init;
@@ -11,10 +12,10 @@ import java.util.*;
 
 public class Battle {
     private final Characters_init player;
-    private final Enemy_init enemies;
+    private final List<Enemy_init> enemies;
     private final List<Effect> activeEffects;
 
-    public Battle(Characters_init player, Enemy_init enemies) {
+    public Battle(Characters_init player, List<Enemy_init> enemies) {
         this.player = player;
         this.enemies = enemies;
         this.activeEffects = new ArrayList<>();
@@ -32,7 +33,10 @@ public class Battle {
     //Start the battle
     public void Start() {
         System.out.println("Battle started !");
-        System.out.println("You have encountered " + enemies.getName());
+        System.out.println("You have encountered:");
+        for(Enemy_init enemy: enemies) {
+            System.out.println("-" + enemy.getName());
+        }
         // while the battle isn't over
         while (!isBattleOver()) {
             playerTurn();
@@ -72,10 +76,13 @@ public class Battle {
             }
 
             if (Choice == 1) {
+
+                Enemy_init enemy = chooseEnemy();
                 System.out.println("You hit the enemy for " + player.getStrength() + " damage");
-                enemies.takeDamage(player.getStrength());
-                System.out.println(enemies.getName() + " has " + enemies.getHealth() + " health left");
+                enemy.takeDamage(player.getStrength());
+                System.out.println(enemy.getName() + " has " + enemy.getHealth() + " health left");
                 player_choice = true;
+
             } else if (Choice == 2) {
                 // List all skills of the player
                 List<Skill> player_skill_list = player.getSkills();
@@ -100,28 +107,33 @@ public class Battle {
 
                 // Use skill if it exists
                 if (playerskill.isActive()) {
-                    if (player.checkMana(playerskill.getManaCost())) {
-                        int damage = player.useSkill(playerskill, enemies);
-                        System.out.println(playerskill.getName() + " hit the enemy for " + (damage - enemies.getDefence()) + " damage");
-                        enemies.takeDamage(damage);
-                        System.out.println(enemies.getName() + " has " + enemies.getHealth() + " health left");
-                        if(playerskill.getEffect() != null) {
-                            for(Effect effect : playerskill.getEffect()) {
+                    if(!playerskill.isPassive()) {
 
-                                if(effect.getType() == EffectType.STUN) {
-                                    if(enemies.isStunned()) {
-                                        System.out.println(enemies.getName() + " is already stunned");
-                                        continue;
-                                    } else{effect.applyEffect(null, enemies);}
-                                }
-                                else if(effect.getType() == EffectType.BUFF) {
-                                    effect.applyEffect(player, null);
+                        Enemy_init enemy = chooseEnemy();
+                        if (player.checkMana(playerskill.getManaCost())) {
+                            int damage = player.useSkill(playerskill, enemy);
+                            System.out.println(playerskill.getName() + " hit the enemy for " + (damage - enemy.getDefence()) + " damage");
+                            enemy.takeDamage(damage);
+                            System.out.println(enemy.getName() + " has " + enemy.getHealth() + " health left");
+                            if (playerskill.getEffect() != null) {
+                                for (Effect effect : playerskill.getEffect()) {
+
+                                    if (effect.getType() == EffectType.STUN) {
+                                        if (enemy.isStunned()) {
+                                            System.out.println(enemy.getName() + " is already stunned");
+                                            continue;
+                                        } else {
+                                            effect.applyEffect(null, enemy);
+                                        }
+                                    } else if (effect.getType() == EffectType.BUFF) {
+                                        effect.applyEffect(player, null);
+                                    }
                                 }
                             }
+                            player_choice = true;
+                        } else {
+                            System.out.println("Not enough mana");
                         }
-                        player_choice = true;
-                    } else {
-                        System.out.println("Not enough mana");
                     }
                 } else {
                     System.out.println("Skill is not active");
@@ -133,23 +145,27 @@ public class Battle {
     }
     private void enemiesTurn() {
         //TODO: enemy AI
-        if(enemies.isStunned()) {
-            System.out.println(enemies.getName() + " is stunned and can't move");
-            return;
+        for(Enemy_init enemy : enemies) {
+            if(enemy.isStunned()) {
+                System.out.println(enemy.getName() + " is stunned and can't move");
+                return;
+            }
+            System.out.println(enemy.getName() + "'s turn");
+            //Get a random active skill from the enemy
+            List<Skill> enemy_skill_list = enemy.getSkills();
+            Skill enemyskill = enemy_skill_list.get((int) (Math.random() * enemy_skill_list.size()));
+            //Use skill
+            if(enemy.getMana() >= enemyskill.getManaCost()) {
+                enemy.useSkill(enemyskill);
+                System.out.println(enemyskill.getName() + " hit you for " + enemy.useSkill(enemyskill) + " damage");
+                player.TakeDamage(enemy.useSkill(enemyskill));
+                System.out.println(player.getName() + " has " + player.getHealth() + " health left");
+            } else {
+                System.out.println("Not enough mana");
+            }
         }
-        System.out.println(enemies.getName() + "'s turn");
-        //Get a random active skill from the enemy
-        List<Skill> enemy_skill_list = enemies.getSkills();
-        Skill enemyskill = enemy_skill_list.get((int) (Math.random() * enemy_skill_list.size()));
-        //Use skill
-        if(enemies.getMana() >= enemyskill.getManaCost()) {
-            enemies.useSkill(enemyskill);
-            System.out.println(enemyskill.getName() + " hit you for " + enemies.useSkill(enemyskill) + " damage");
-            player.TakeDamage(enemies.useSkill(enemyskill));
-            System.out.println(player.getName() + " has " + player.getHealth() + " health left");
-        } else {
-            System.out.println("Not enough mana");
-        }
+
+
     }
 
     private void handleEffectDuration() {
@@ -159,23 +175,49 @@ public class Battle {
             Effect effect = iterator.next();
             effect.decreaseDuration();
             if (effect.getDuration() <= 0) {
-                effect.removeEffect(player, enemies);
+                effect.removeEffect(player, null);
+                for(Enemy_init enemy : enemies) {
+                    effect.removeEffect(null, enemy);
+                }
                 iterator.remove();
             }
         }
     }
 
     private boolean isBattleOver() {
-        return player.getHealth() <= 0 || enemies.getHealth() <= 0;
+        return player.getHealth() <= 0 || enemies.stream().allMatch(enemy -> enemy.getHealth() <= 0);
     }
 
     private void endBattle() {
         // TODO: When all status effects are implemented, remove them here
         for(Effect effect : activeEffects) {
-            effect.removeEffect(player, enemies);
+            effect.removeEffect(player, null);
+            for(Enemy_init enemy : enemies) {
+                effect.removeEffect(null, enemy);
+            }
         }
-        System.out.println("You have gained " + enemies.getLeveling().getTotalExp() / 8 + " experience points");
-        Leveling.gainExp(enemies.getLeveling().getTotalExp() / 8, player);
-        player.updateAllQuests(enemies, null, null);
+        int exp = 0;
+        for(Enemy_init enemy : enemies) {
+            exp += (enemy.getLeveling().getTotalExp() / 8);
+        }
+        System.out.println("You have gained " + exp + " experience points");
+        Leveling.gainExp(exp, player);
+        for (Enemy_init enemy : enemies) {
+            player.updateAllQuests(enemy, null, null);
+        }
+
+    }
+
+    private Enemy_init chooseEnemy(){
+        if (enemies.size() == 1) {
+            return enemies.getFirst();
+        }
+        System.out.println("Choose an enemy to attack");
+        for (int i = 0; i < enemies.size(); i++) {
+            System.out.println(i + 1 + ". " + enemies.get(i).getName());
+        }
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+        return enemies.get(choice - 1);
     }
 }

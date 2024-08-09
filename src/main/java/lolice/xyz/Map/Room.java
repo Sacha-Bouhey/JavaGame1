@@ -11,11 +11,32 @@ public class Room {
     private String name;
     private int x;
     private int y;
-
+    private boolean cleared;
     public Room(String name, int x, int y) {
         this.name = name;
         this.x = x;
         this.y = y;
+        this.cleared = false;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public boolean isCleared() {
+        return cleared;
+    }
+
+    public void setCleared() {
+        this.cleared = true;
     }
 
     public static class TreasureRoom extends Room {

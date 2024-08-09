@@ -38,6 +38,7 @@ public class Characters_init implements Serializable {
     private List<Location> locations;
     private final Inventory inventory;
     private Items activeItem;
+    private Map<String, Items.Armor> activeArmor;
     private boolean isStunned;
 
     public Characters_init(String Cname, int Cmaxhealth, int Cmaxstrength, int Cmaxmana, int Cagility, int Cdefence, int Cstatpoint,List<Skill> skills, int x, int y) {
@@ -64,6 +65,7 @@ public class Characters_init implements Serializable {
         this.locations = new ArrayList<>();
         this.inventory = new Inventory(10);
         this.isStunned = false;
+        this.activeArmor = Collections.emptyMap();
     }
 
     //Getters
@@ -135,6 +137,18 @@ public class Characters_init implements Serializable {
         return inventory;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Map<String, Items.Armor> getActiveArmors() {
+        return activeArmor;
+    }
+
     public List<Quest> getFinishedQuest() {
         List<Quest> finishedQuests = new ArrayList<>();
         for(Quest quest : activeQuests) {
@@ -204,6 +218,14 @@ public class Characters_init implements Serializable {
 
     public void setStunned(Boolean isstunned) {
         this.isStunned = isstunned;
+    }
+
+    public void setX(int x){
+        this.x = x;
+    }
+
+    public void setY(int y){
+        this.y = y;
     }
 
     //Show info
@@ -745,7 +767,9 @@ public class Characters_init implements Serializable {
                     if (this.getCurrentLocation() instanceof Location.Village) {
                         break;
                     } else if (this.getCurrentLocation() instanceof Location.LocationWithEnemies.Wilderness) {
-                        Battle battle = new Battle(this, ((Location.LocationWithEnemies.Wilderness) this.getCurrentLocation()).selectRandomEnemy(this));
+                        List<Enemy_init>enemies = new ArrayList<>();
+                        enemies.add(((Location.LocationWithEnemies.Wilderness) this.getCurrentLocation()).selectRandomEnemy(this));
+                        Battle battle = new Battle(this, enemies);
                         battle.Start();
                         break;
                     } else if (this.getCurrentLocation() instanceof Location.LocationWithEnemies.Dungeon) {
@@ -765,6 +789,50 @@ public class Characters_init implements Serializable {
             }
         }
         userChoiceScanner.close();
+    }
+
+    public void addArmorPiece(Items.Armor armorToEquip) {
+        String armorType;
+        if(armorToEquip instanceof Items.Armor.Helmet) {
+            armorType = "head";
+        } else if(armorToEquip instanceof Items.Armor.Chestplate) {
+            armorType = "chest";
+        } else if(armorToEquip instanceof Items.Armor.Leggings) {
+            armorType = "legs";
+        } else if(armorToEquip instanceof Items.Armor.Boots) {
+            armorType = "feet";
+        } else {
+            System.out.println("Invalid armor type");
+            return;
+        }
+
+        if(activeArmor.get(armorType) != null){
+            System.out.println("You already have an helmet equipped. Do you want to replace it ?");
+            System.out.println("1. Yes");
+            System.out.println("2. No");
+            System.out.println("Warning: if your inventory is full, the item will be gone!");
+            while(true) {
+                Scanner userChoiceScanner = new Scanner(System.in);
+                try {
+                    int choice = userChoiceScanner.nextInt();
+                    if (choice == 1) {
+                        inventory.addItem(activeArmor.get(armorType));
+                        System.out.println("You removed item: " + activeArmor.get(armorType).getName());
+                        activeArmor.remove(armorType);
+                        activeArmor.put(armorType, armorToEquip);
+                        System.out.println("You equipped: " + armorToEquip.getName());
+                        break;
+                    } else if (choice == 2) {
+                        System.out.println("You didn't equip the item");
+                        break;
+                    } else {
+                        System.out.println("Invalid choice");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid choice not a number");
+                }
+            }
+        }
     }
 }
 

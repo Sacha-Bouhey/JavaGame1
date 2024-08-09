@@ -46,7 +46,7 @@ public class Game_Start {
 
     public static void initEnemies() {
         List<Skill> goblinSkills = new ArrayList<>();
-        goblinSkills.add(new Skill("Goblin claw", "Weak attack, but dangerous for a beginner", 10, 0, true, null));
+        goblinSkills.add(new Skill("Goblin claw", "Weak attack, but dangerous for a beginner", 10, 0, true, null, false));
         List <Enemy_init> enemies = new ArrayList<>();
         enemies.add(new Enemy_init("Goblin", 100, 10, 100, 1, goblinSkills));
         Enemies_init.put("Forest", enemies);
@@ -55,7 +55,7 @@ public class Game_Start {
     public static void initLocation() {
         Location_init.add(new Location.Village("Stating village", 0, 0, true, "The starting village is a peaceful place for beginners to start their journey."));
         Location_init.add(new Location.LocationWithEnemies.Wilderness("Forest", 1, 0, false, "The forest is a dangerous place with monsters lurking around.", Enemies_init.get("Forest")));
-        Location_init.add(new Location("Cave", 0, 1, false, "The cave is a dark and mysterious place with hidden treasures."));
+        Location_init.add(new Location.LocationWithEnemies.Dungeon("Cave", 0, 1, true, "The cave is a dark and mysterious place with hidden treasures.", Enemies_init.get("Forest"), 8));
         Location_init.add(new Location("Castle", 0, -1, false, "The castle is a place where the king resides and holds great power."));
 
 
@@ -70,7 +70,7 @@ public class Game_Start {
 
         Quest_init.get("Tutorial 1").addPostCompletionAction(new UnlockLocationAction("Forest"));
 
-        Quest_init.put("Tutorial 2", new Quest("Tutorial 2: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest. You can find goblins in the forest.", 2, new Items.Weapon.mageWeapon("Wooden staff", "A basic staff for beginners", 10, 25, false, 2, 100, 1, 1, 10, 100), QuestType.KILL));
+        Quest_init.put("Tutorial 2", new Quest("Tutorial 2: Defeat Goblin","Defeat Goblin", 100, 10, "You must kill 2 goblins to complete this quest. You can find goblins in the forest.", 2, GameObjects.WOODEN_STAFF, QuestType.KILL));
 
         Quest_init.get("Tutorial 2").addPostCompletionAction(new AddItemToShopAction(GameObjects.SMALL_HEALING_POTION));
 

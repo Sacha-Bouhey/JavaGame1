@@ -1,11 +1,14 @@
 package lolice.xyz.Iddle;
 import lolice.xyz.Battle;
+import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.Map.Location;
 import lolice.xyz.Players.Characters_init;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -90,10 +93,22 @@ public class Menu {
                             if (player.getCurrentLocation() instanceof Location.Village) {
                                 break;
                             } else if (player.getCurrentLocation() instanceof Location.LocationWithEnemies.Wilderness) {
-                                Battle battle = new Battle(player, ((Location.LocationWithEnemies.Wilderness) player.getCurrentLocation()).selectRandomEnemy(player));
+                                List<Enemy_init> enemies = new ArrayList<>();
+                                enemies.add(((Location.LocationWithEnemies.Wilderness) player.getCurrentLocation()).selectRandomEnemy(player));
+                                Battle battle = new Battle(player, enemies);
                                 battle.Start();
                                 break;
                             } else if (player.getCurrentLocation() instanceof Location.LocationWithEnemies.Dungeon) {
+                                if (((Location.LocationWithEnemies.Dungeon) player.getCurrentLocation()).isCleared()) {
+                                    System.out.println("Dungeon already cleared. You cant go inside.");
+                                }
+                                else {
+                                    int x = player.getX();
+                                    int y = player.getY();
+                                    ((Location.LocationWithEnemies.Dungeon) player.getCurrentLocation()).generateDungeon(player);
+                                    player.setX(x);
+                                    player.setY(y);
+                                }
                                 break;
                             }
                         } else if (choice.equalsIgnoreCase("n")) {

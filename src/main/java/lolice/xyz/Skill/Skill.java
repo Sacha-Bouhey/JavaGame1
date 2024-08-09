@@ -16,15 +16,17 @@ public class Skill implements Serializable {
     private boolean IsActive;
     private final int ManaCost;
     private final List<Effect> Effect;
+    private final boolean isPassive;
 
 
-    public Skill(String SkillName, String Description, int Damage, int ManaCost, boolean IsActive, List<Effect> Effect) {
+    public Skill(String SkillName, String Description, int Damage, int ManaCost, boolean IsActive, List<Effect> Effect, boolean isPassive) {
         this.SkillName = SkillName;
         this.Description = Description;
         this.Damage = Damage;
         this.ManaCost = ManaCost;
         this.IsActive = IsActive;
         this.Effect = Effect;
+        this.isPassive = isPassive;
     }
 
     //Getters
@@ -50,6 +52,10 @@ public class Skill implements Serializable {
 
     public List<Effect> getEffect() {
         return Effect;
+    }
+
+    public boolean isPassive() {
+        return isPassive;
     }
 
     //Setters
