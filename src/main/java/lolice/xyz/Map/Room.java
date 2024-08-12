@@ -73,6 +73,12 @@ public class Room {
 
     }
 
+    public static class EmptyRoom extends Room {
+        public EmptyRoom(String name, int x, int y) {
+            super(name, x, y);
+        }
+    }
+
     public static class BossRoom extends Room {
         private final List<Enemy_init> enemies;
 
