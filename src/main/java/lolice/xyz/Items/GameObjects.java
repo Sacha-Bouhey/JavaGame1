@@ -33,9 +33,9 @@ public class GameObjects {
 
 
     // Chests
-    public static final Chest SMALL_CHEST = new Chest("Small chest", List.of(), 0, false, null);
-    public static final Chest WOODEN_CHEST = new Chest("Wooden chest", List.of(), 0, true, WOODEN_KEY);
-    public static final Chest BIG_CHEST = new Chest("Big chest", List.of(), 0, true, null);
+    public static final Chest SMALL_CHEST = new Chest("Small chest", 0, false, null);
+    public static final Chest WOODEN_CHEST = new Chest("Wooden chest", 0, true, WOODEN_KEY);
+    public static final Chest BIG_CHEST = new Chest("Big chest", 0, true, null);
 
 
     static {
