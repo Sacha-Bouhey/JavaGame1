@@ -1,11 +1,13 @@
 package lolice.xyz.Map;
 
+import javafx.application.Platform;
 import lolice.xyz.Battle;
 import lolice.xyz.Items.GameObjects;
 import lolice.xyz.Players.Characters_init;
 import lolice.xyz.Enemies.Enemy_init;
 import lolice.xyz.NPC.NPC;
 import lolice.xyz.Items.Chest;
+
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -71,7 +73,7 @@ public class Location implements Serializable {
         }
 
         public List<Enemy_init> getEnemies() {
-            return this.enemies;
+            return enemies;
         }
 
         public static Enemy_init selectRandomEnemy(Characters_init player) {
@@ -118,6 +120,32 @@ public class Location implements Serializable {
                 this.cleared = true;
             }
 
+            public void showAdjacentRoom(Characters_init player) {
+                for(Room room : rooms) {
+                    if(room.getX() == player.getX() && room.getY() == player.getY()) {
+                        System.out.println("You are in the room: " + room.getName() + "\n");
+                        System.out.println("Adjacent rooms: ");
+                    }
+                    if(room.getX() == player.getX() + 1 && room.getY() == player.getY()) {
+                        System.out.println("Right: " + room.getName());
+                    }
+                    if(room.getX() == player.getX() - 1 && room.getY() == player.getY()) {
+                        System.out.println("Left: " + room.getName());
+                    }
+                    if(room.getX() == player.getX() && room.getY() == player.getY() + 1) {
+                        System.out.println("Up: " + room.getName());
+                    }
+                    if(room.getX() == player.getX() && room.getY() == player.getY() - 1) {
+                        System.out.println("Down: " + room.getName());
+                    }
+                }
+
+            }
+            public void dungeonStart(Characters_init player) {
+                generateDungeon(player);
+                exploreDungeon(player);
+            }
+
             public void generateDungeon(Characters_init player) {
                 Set<String> usedCoordinates = new HashSet<>();
                 rooms = new ArrayList<>();
@@ -127,6 +155,7 @@ public class Location implements Serializable {
                 int y = 0;
                 rooms.add(new Room("Empty Room", x, y));
                 usedCoordinates.add(x + "," + y);
+                x +=1;
 
                 for (int i = 1; i < numberOfRooms; i++) {
                     int a = new Random().nextInt(10);
@@ -158,11 +187,13 @@ public class Location implements Serializable {
                     }
                 }
                 rooms.add(generateBossRoom(x+1, y));
+                rooms.add(generateTreasureRoom(x+2, y));
             }
 
             public Room.BossRoom generateBossRoom(int x, int y){
                 return new Room.BossRoom("Boss Room", x, y, null);
             }
+
             public Room.TreasureRoom generateTreasureRoom(int x, int y){
                 Chest chest;
                 int a = new Random().nextInt(10);
@@ -178,6 +209,37 @@ public class Location implements Serializable {
 
                 chest.generateItems();
                 return new Room.TreasureRoom("Treasure Room", x, y, chest, null);
+            }
+
+            public void startDungeonInterface(Characters_init player) {
+                DungeonInterface.setDirectionClickListener(new DungeonInterface.DirectionClickListener() {
+                    @Override
+                    public void onDirectionClick(String direction) {
+                        handleDirectionClick(player, direction);
+                    }
+                });
+                Platform.runLater(DungeonInterface::startInterface);
+            }
+
+            private void handleDirectionClick(Characters_init player, String direction) {
+                switch (direction.toLowerCase()) {
+                    case "right":
+                        player.setX(player.getX() + 1);
+                        break;
+                    case "left":
+                        player.setX(player.getX() - 1);
+                        break;
+                    case "up":
+                        player.setY(player.getY() + 1);
+                        break;
+                    case "down":
+                        player.setY(player.getY() - 1);
+                        break;
+                    default:
+                        System.out.println("Invalid direction. Try again");
+                        return;
+                }
+                exploreDungeon(player);
             }
 
             public Room.EnemyRoom generateEnemyRoom(Characters_init player, int numberOfEnemies, int x, int y){
@@ -202,10 +264,12 @@ public class Location implements Serializable {
                 player.setY(0);
                 if(getCurrentRoom(player.getX(), player.getX()) == null) {
                     System.out.println("error in dungeon. Leaving");
-                    return;
                 }
                 else {
+                    DungeonInterface.startInterface();
+
                     while(!this.cleared) {
+
                         if(!getCurrentRoom(player.getX(), player.getY()).isCleared()){
                             Room currentRoom = getCurrentRoom(player.getX(), player.getY());
                             System.out.println("You entered a room: " + currentRoom.getName());
@@ -227,8 +291,12 @@ public class Location implements Serializable {
                                 Chest chest = ((Room.TreasureRoom) currentRoom).getChest();
                                 chest.openChest(player);
                                 currentRoom.setCleared();
-                            }
-                            else if(currentRoom instanceof Room.BossRoom) {
+
+                            } else if (currentRoom instanceof Room.EmptyRoom) {
+                                System.out.println("You found an empty room");
+                                currentRoom.setCleared();
+
+                            } else if(currentRoom instanceof Room.BossRoom) {
                                 System.out.println("You found the boss room");
                                 List<Enemy_init> enemies = new ArrayList<>();
                                 enemies.add(selectRandomEnemy(player));
@@ -248,6 +316,32 @@ public class Location implements Serializable {
                             System.out.println("You already cleared this room");
 
                         }
+
+
+
+
+                        while (true) {
+                            Scanner scanner = new Scanner(System.in);
+                            System.out.println("What do you want to do ?");
+                            System.out.println("1: Show inventory menu");
+                            System.out.println("2: Continue your exploration");
+                            if (this.cleared) {
+                                System.out.println("3: Leave the dungeon");
+                            }
+                            String choice = scanner.nextLine();
+                            if (choice.equals("1")) {
+                                player.inventoryMenu();
+                            } else if (choice.equals("2")) {
+                                showAdjacentRoom(player);
+                                DungeonInterface.startInterface();
+                            } else if (choice.equals("3") && this.cleared) {
+                                System.out.println("You left the dungeon");
+                                return;
+                            } else {
+                                System.out.println("Invalid choice. Try again");
+                            }
+
+                        }
                     }
                 }
 
@@ -259,7 +353,7 @@ public class Location implements Serializable {
 
 
     public static class Village extends Location {
-        private List<NPC> npc;
+        private final List<NPC> npc;
         public Village(String name, int x, int y, boolean unlocked, String description) {
             super(name, x, y, unlocked, description);
             this.npc = new ArrayList<>();
