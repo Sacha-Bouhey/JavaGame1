@@ -105,7 +105,9 @@ public class Menu {
                                 else {
                                     int x = player.getX();
                                     int y = player.getY();
-                                    ((Location.LocationWithEnemies.Dungeon) player.getCurrentLocation()).generateDungeon(player);
+                                    Location.LocationWithEnemies.Dungeon dungeon = (Location.LocationWithEnemies.Dungeon) player.getCurrentLocation();
+                                    System.out.println("Dungeon found! " + dungeon.getLocationName());
+                                    dungeon.dungeonStart(player);
                                     player.setX(x);
                                     player.setY(y);
                                 }
@@ -122,6 +124,7 @@ public class Menu {
                         userChoiceScanner.nextLine(); // Clear the buffer
                     } catch (Exception e) {
                         System.out.println("An error occurred: " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
             } else if (Choice == 8) {
