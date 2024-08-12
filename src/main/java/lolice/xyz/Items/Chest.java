@@ -1,5 +1,6 @@
 package lolice.xyz.Items;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Random;
@@ -9,15 +10,15 @@ import lolice.xyz.Players.Characters_init;
 
 public class Chest {
     private final String name;
-    private final List<Items> items;
+    private List<Items> items;
     private final int gold;
     private final boolean opened;
     private final boolean keyNeeded;
     private final Key key;
 
-    public Chest(String name, List<Items> items, int gold, boolean keyNeeded, Key key) {
+    public Chest(String name,  int gold, boolean keyNeeded, Key key) {
         this.name = name;
-        this.items = items;
+        this.items = new ArrayList<>();
         this.gold = gold;
         this.key = key;
         this.opened = false;
@@ -61,10 +62,20 @@ public class Chest {
                         player.getInventory().removeItem(item);
                         for (Items chestItem : this.getItems()) {
                             player.getInventory().addItem(chestItem);
+                            System.out.println("You got: " + chestItem.getName());
                         }
                         player.setGold(player.getGold() + this.getGold());
+                        System.out.println("You got: " + this.getGold() + " gold");
                     }
                 }
+            }
+            else {
+                for (Items chestItem : this.getItems()) {
+                    player.getInventory().addItem(chestItem);
+                    System.out.println("You got: " + chestItem.getName());
+                }
+                player.setGold(player.getGold() + this.getGold());
+                System.out.println("You got: " + this.getGold() + " gold");
             }
         } else {
             System.out.println("You didn't open the chest");
@@ -72,7 +83,7 @@ public class Chest {
     }
 
     public void addItem(Items item) {
-        this.items.add(item);
+        items.add(item);
     }
 
     public void generateItems() {
@@ -88,11 +99,9 @@ public class Chest {
                 }
                 while (true) {
                     int c = new Random().nextInt(10);
+                    this.addItem(GameObjects.getRandomItem(quality));
                     if(c < 9) {
-                        this.addItem(GameObjects.getRandomItem(quality));
                         break;
-                    } else {
-                        this.addItem(GameObjects.getRandomItem(quality));
                     }
                 }
                 break;
@@ -107,11 +116,9 @@ public class Chest {
                 }
                 while (true) {
                     int e = new Random().nextInt(10);
+                    this.addItem(GameObjects.getRandomItem(quality));
                     if(e < 9) {
-                        this.addItem(GameObjects.getRandomItem(quality));
                         break;
-                    } else {
-                        this.addItem(GameObjects.getRandomItem(quality));
                     }
                 }
                 break;
@@ -126,11 +133,9 @@ public class Chest {
                 }
                 while (true) {
                     int g = new Random().nextInt(10);
+                    this.addItem(GameObjects.getRandomItem(quality));
                     if(g < 9) {
-                        this.addItem(GameObjects.getRandomItem(quality));
                         break;
-                    } else {
-                        this.addItem(GameObjects.getRandomItem(quality));
                     }
                 }
                 break;
