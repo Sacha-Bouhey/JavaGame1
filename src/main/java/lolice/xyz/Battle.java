@@ -106,6 +106,7 @@ public class Battle {
                 Skill playerskill = getSkillByName(skillName);
 
                 // Use skill if it exists
+                assert playerskill != null;
                 if (playerskill.isActive()) {
                     if(!playerskill.isPassive()) {
 
@@ -114,6 +115,9 @@ public class Battle {
                             int damage = player.useSkill(playerskill, enemy);
                             System.out.println(playerskill.getName() + " hit the enemy for " + (damage - enemy.getDefence()) + " damage");
                             enemy.takeDamage(damage);
+                            if(enemy.getHealth() <= 0) {
+                                enemy.setHealth(0);
+                            }
                             System.out.println(enemy.getName() + " has " + enemy.getHealth() + " health left");
                             if (playerskill.getEffect() != null) {
                                 for (Effect effect : playerskill.getEffect()) {
@@ -121,7 +125,6 @@ public class Battle {
                                     if (effect.getType() == EffectType.STUN) {
                                         if (enemy.isStunned()) {
                                             System.out.println(enemy.getName() + " is already stunned");
-                                            continue;
                                         } else {
                                             effect.applyEffect(null, enemy);
                                         }
@@ -148,20 +151,22 @@ public class Battle {
         for(Enemy_init enemy : enemies) {
             if(enemy.isStunned()) {
                 System.out.println(enemy.getName() + " is stunned and can't move");
-                return;
+                break;
             }
-            System.out.println(enemy.getName() + "'s turn");
-            //Get a random active skill from the enemy
-            List<Skill> enemy_skill_list = enemy.getSkills();
-            Skill enemyskill = enemy_skill_list.get((int) (Math.random() * enemy_skill_list.size()));
-            //Use skill
-            if(enemy.getMana() >= enemyskill.getManaCost()) {
-                enemy.useSkill(enemyskill);
-                System.out.println(enemyskill.getName() + " hit you for " + enemy.useSkill(enemyskill) + " damage");
-                player.TakeDamage(enemy.useSkill(enemyskill));
-                System.out.println(player.getName() + " has " + player.getHealth() + " health left");
-            } else {
-                System.out.println("Not enough mana");
+            if (enemy.getHealth() > 0) {
+                System.out.println(enemy.getName() + "'s turn");
+                //Get a random active skill from the enemy
+                List<Skill> enemy_skill_list = enemy.getSkills();
+                Skill enemyskill = enemy_skill_list.get((int) (Math.random() * enemy_skill_list.size()));
+                //Use skill
+                if (enemy.getMana() >= enemyskill.getManaCost()) {
+                    enemy.useSkill(enemyskill);
+                    System.out.println(enemyskill.getName() + " hit you for " + enemy.useSkill(enemyskill) + " damage");
+                    player.TakeDamage(enemy.useSkill(enemyskill));
+                    System.out.println(player.getName() + " has " + player.getHealth() + " health left");
+                } else {
+                    System.out.println("Not enough mana");
+                }
             }
         }
 
